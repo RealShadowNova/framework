@@ -847,7 +847,7 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CorePreCommandRun.ts": {
-        "version": "05e732b05c4091997da0303c3b88c86e35c63757f5c477f8fdf0eb56f5cdbbae",
+        "version": "8747ecadf95440bc08ef89b1c951041990cc7c6c6d2b1a21814224a3d4cc7b85",
         "signature": "416295cfa393e4d16bbd255d629d60acd1ae03bf97e6d29eef9e5292e0659034",
         "affectsGlobalScope": false
       },
@@ -1460,6 +1460,7 @@
       ],
       "../src/events/command-handler/CorePreCommandRun.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../src/lib/errors/UserError.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Events.ts",
         "../src/lib/utils/Result.ts"
