@@ -682,8 +682,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/types/Events.ts": {
-        "version": "c0bdad9442ef5be94be418452d9a5b16a8867996f4189a0f90c9f2060c1c4ff4",
-        "signature": "4fc570dcee54a3b0ea4a5c9dacf1e64c3f7acb919f89fe4f236a2bfd2a57c25f",
+        "version": "23f3654229f51d2b1651ac703f88ff4b6eb1a54f4fc0c8f2df66e205cc5d654d",
+        "signature": "0af80f1d92f45beeb0d5368c726b432e07f71ea6463be3087454b91c25ba1217",
         "affectsGlobalScope": false
       },
       "../src/lib/structures/base/BaseAliasStore.ts": {
@@ -837,8 +837,8 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CoreCommandAccepted.ts": {
-        "version": "70dc8edcaee6d64497e5b7f84e157bed0159809c2f1bb68ada2409a63f482a15",
-        "signature": "817bbe80085893c374381074c57a6f162ed6de996bfab65befb4de9ea8bba7a7",
+        "version": "1458c53f322f9478957e1eb18546453a693f02d516b3af3a233d7d375e22496a",
+        "signature": "fee4f31709c4b48aa95d64e22927ffe0f39755a216551813504b1d7f449711d0",
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CoreMessageParser.ts": {
@@ -847,12 +847,12 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CorePreCommandRun.ts": {
-        "version": "ab5bd2338ed416d641414d9b9d7f13f7a39e6986b7f9540643cce4103c3761ac",
-        "signature": "7178c4be644186d2330faaa6170368dfbb5331b5d1da0e3f148b9ebe7f68ec57",
+        "version": "05e732b05c4091997da0303c3b88c86e35c63757f5c477f8fdf0eb56f5cdbbae",
+        "signature": "416295cfa393e4d16bbd255d629d60acd1ae03bf97e6d29eef9e5292e0659034",
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CorePrefixedMessage.ts": {
-        "version": "19d20bb6d2a9118cb8345cd5c017c5a0974c3acaf735abc3748b53f05a688e45",
+        "version": "139697faabef004ed293f16a87a2adcf0d100b9b5260af9e04f01aed35059eca",
         "signature": "3849541f6d478e9fe6059b11b180b521d33e3250b6d7b2f6fcd184b9f0379b1a",
         "affectsGlobalScope": false
       },
@@ -1449,8 +1449,6 @@
       ],
       "../src/events/command-handler/CoreCommandAccepted.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
-        "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Events.ts"
       ],
@@ -1462,8 +1460,6 @@
       ],
       "../src/events/command-handler/CorePreCommandRun.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
-        "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Events.ts",
         "../src/lib/utils/Result.ts"
@@ -1637,6 +1633,7 @@
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/lib/SapphireClient.ts",
+        "../src/lib/errors/UserError.ts",
         "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Enums.ts"
@@ -2120,8 +2117,6 @@
       ],
       "../src/events/command-handler/CoreCommandAccepted.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
-        "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Events.ts"
       ],
@@ -2133,8 +2128,6 @@
       ],
       "../src/events/command-handler/CorePreCommandRun.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
-        "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Events.ts"
       ],
@@ -2295,6 +2288,7 @@
       "../src/lib/types/Events.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
+        "../src/lib/errors/UserError.ts",
         "../src/lib/structures/Command.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/types/Enums.ts"

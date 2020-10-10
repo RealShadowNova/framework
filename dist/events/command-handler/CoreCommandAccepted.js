@@ -7,12 +7,12 @@ class CoreEvent extends Event_1.Event {
     constructor(context) {
         super(context, { event: Events_1.Events.CommandAccepted });
     }
-    async run(message, command, parameters) {
+    async run({ message, command, parameters }) {
         const args = await command.preParse(message, parameters);
         try {
             this.client.emit(Events_1.Events.CommandRun, message, command);
             const result = await command.run(message, args);
-            this.client.emit(Events_1.Events.CommandSuccess, message, command, result);
+            this.client.emit(Events_1.Events.CommandSuccess, { message, command, result, parameters });
         }
         catch (error) {
             this.client.emit(Events_1.Events.CommandError, error, { piece: command, message });
