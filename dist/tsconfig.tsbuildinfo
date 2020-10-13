@@ -842,7 +842,7 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CoreMessageParser.ts": {
-        "version": "aa11ab9db44a19448e4f9acc68bdb1fdf0c468e982426ce67096f2c5f1be795f",
+        "version": "8110c8045ca6838945154940d43eca16ff5cce3ba0969ad802b60aa714f69f59",
         "signature": "e0072198cc2eb40891b4284330444420695cddf27c6108b0ca19c8f8dcc04a1a",
         "affectsGlobalScope": false
       },
