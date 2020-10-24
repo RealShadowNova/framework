@@ -792,8 +792,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreMember.ts": {
-        "version": "8e173eee59c0748897b8896f0d6f599f5d33f499bf1e919ec728edf9619b0400",
-        "signature": "c9382179be13b2885c302a9ddd52db1dd545d84bd5df419e7f4f20456a68b0cb",
+        "version": "4f5c15d5c629befa44f353b9010922fd25431bef378cc8118d4296a757d4bbbd",
+        "signature": "1d5d6b9a20ecdc7b41108be6b2e2ab507e41962eab17d7d89653848033b93e2b",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreNewsChannel.ts": {
@@ -807,8 +807,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreRole.ts": {
-        "version": "c04caa6e99fbe5990be4a92c39f86c0143968bf731f4fa01b4e4adc66774c48b",
-        "signature": "9f8e3804ccf71bc66230c1f9bd747d2fcd2e58ff9a5e5228d3ee621457fb3d83",
+        "version": "ded8e08a71b3df2534332f86d37494121adda552cbb89810eb0f7a754aa74021",
+        "signature": "337aa685e4bada7aa0d2e71e8901844ee1a95583d475a314d071b1d958c7082b",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreString.ts": {
@@ -822,8 +822,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreUser.ts": {
-        "version": "9daa2d84af161a2b7acaa23b4164b7e145299dd578a0ef1861c0eab47ecb1e1c",
-        "signature": "b097afd11e0157a809f4e340369f048de18b345e12a42a98778897c0bec54f64",
+        "version": "e9696ea0c6ed070f681737aab240dbfdbc9ddd48bcbf79e4db35e284ebc50c12",
+        "signature": "25859185ffec84c263316481ee41d794e49ffb7f4227e4fb6739e62e897682a4",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreVoiceChannel.ts": {
