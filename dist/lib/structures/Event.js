@@ -17,6 +17,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Event = void 0;
 const Events_1 = require("../types/Events");
 const BasePiece_1 = require("./base/BasePiece");
+/**
+ * The base event class. This class is abstract and is to be extended by subclasses, which should implement the methods. In
+ * Sapphire's workflow, events are called when the emitter they listen on emits a new message with the same event name.
+ *
+ * @example
+ * ```typescript
+ * // TypeScript:
+ * import { Event, Events, PieceContext } from 'sapphire/framework';
+ *
+ * // Define a class extending `CoreEvent`, then export it.
+ * // NOTE: You can use `export default` or `export =` too.
+ * export class CoreEvent extends Event<Events.Ready> {
+ *   public constructor(context: PieceContext) {
+ *     super(context, { event: Events.Ready, once: true });
+ *   }
+ *
+ *   public run() {
+ *     if (!this.client.id) this.client.id = this.client.user?.id ?? null;
+ *   }
+ * }
+ * ```
+ *
+ * @example
+ * ```javascript
+ * // JavaScript:
+ * const { Event, Events } = require('sapphire/framework');
+ *
+ * // Define a class extending `CoreEvent`, then export it.
+ * module.exports = class CoreEvent extends Event {
+ *   constructor(context) {
+ *     super(context, { event: Events.Ready, once: true });
+ *   }
+ *
+ *   run() {
+ *     if (!this.client.id) this.client.id = this.client.user?.id ?? null;
+ *   }
+ * }
+ * ```
+ */
 class Event extends BasePiece_1.BasePiece {
     constructor(context, options = {}) {
         var _a, _b, _c;
@@ -27,7 +66,7 @@ class Event extends BasePiece_1.BasePiece {
             typeof options.emitter === 'undefined'
                 ? this.client
                 : (_a = (typeof options.emitter === 'string' ? Reflect.get(this.client, options.emitter) : options.emitter)) !== null && _a !== void 0 ? _a : null;
-        this.event = (_b = options.event) !== null && _b !== void 0 ? _b : '';
+        this.event = (_b = options.event) !== null && _b !== void 0 ? _b : this.name;
         this.once = (_c = options.once) !== null && _c !== void 0 ? _c : false;
         __classPrivateFieldSet(this, _listener, this.emitter && this.event ? (this.once ? this._runOnce.bind(this) : this._run.bind(this)) : null);
     }

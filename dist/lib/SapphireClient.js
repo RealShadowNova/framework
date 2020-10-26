@@ -16,53 +16,71 @@ const Logger_1 = require("./utils/logger/Logger");
 const RootDir_1 = require("./utils/RootDir");
 // Extensions
 require("./extensions/SapphireMessage");
+/**
+ * The base [[Client]] extension that makes Sapphire work. When building a Discord bot with the framework, the developer
+ * must either use this class, or extend it.
+ *
+ * Sapphire also automatically detects the folders to scan for pieces, please read
+ * [[SapphireClient.registerUserDirectories]] for reference. This method is called at the start of the
+ * [[SapphireClient.login]] method.
+ *
+ * @since 1.0.0
+ * @example
+ * ```typescript
+ * const client = new SapphireClient({
+ *   presence: {
+ *     activity: {
+ *       name: 'for commands!',
+ *       type: 'LISTENING'
+ *     }
+ *   }
+ * });
+ *
+ * client.login(process.env.DISCORD_TOKEN)
+ *   .catch(console.error);
+ * ```
+ *
+ * @example
+ * ```typescript
+ * // Automatically scan from a specific directory, e.g. the main
+ * // file is at `/home/me/bot/index.js` and all your pieces are at
+ * // `/home/me/bot/pieces` (e.g. `/home/me/bot/pieces/commands/MyCommand.js`):
+ * const client = new SapphireClient({
+ *   baseUserDirectory: join(__dirname, 'pieces'),
+ *   // More options...
+ * });
+ * ```
+ *
+ * @example
+ * ```typescript
+ * // Opt-out automatic scanning:
+ * const client = new SapphireClient({
+ *   baseUserDirectory: null,
+ *   // More options...
+ * });
+ * ```
+ */
 class SapphireClient extends discord_js_1.Client {
     constructor(options = {}) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
         super(options);
         /**
          * The client's ID, used for the user prefix.
          * @since 1.0.0
          */
         this.id = null;
-        /**
-         * The method to be overriden by the developer.
-         * @since 1.0.0
-         * @return A string for a single prefix, an array of strings for matching multiple, or null for no match (mention prefix only).
-         * @example
-         * ```typescript
-         * // Return always the same prefix (unconfigurable):
-         * client.fetchPrefix = () => '!';
-         * ```
-         * @example
-         * ```typescript
-         * // Retrieving the prefix from a SQL database:
-         * client.fetchPrefix = async (message) => {
-         *   const guild = await driver.getOne('SELECT prefix FROM public.guild WHERE id = $1', [message.guild.id]);
-         *   return guild?.prefix ?? '!';
-         * };
-         * ```
-         * @example
-         * ```typescript
-         * // Retrieving the prefix from an ORM:
-         * client.fetchPrefix = async (message) => {
-         *   const guild = await driver.getRepository(GuildEntity).findOne({ id: message.guild.id });
-         *   return guild?.prefix ?? '!';
-         * };
-         * ```
-         */
-        this.fetchPrefix = () => null;
         for (const plugin of SapphireClient.plugins.values("preGenericsInitialization" /* PreGenericsInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
-        this.logger = (_b = (_a = options.logger) === null || _a === void 0 ? void 0 : _a.instance) !== null && _b !== void 0 ? _b : new Logger_1.Logger((_d = (_c = options.logger) === null || _c === void 0 ? void 0 : _c.level) !== null && _d !== void 0 ? _d : 40 /* Warn */);
+        this.logger = (_b = (_a = options.logger) === null || _a === void 0 ? void 0 : _a.instance) !== null && _b !== void 0 ? _b : new Logger_1.Logger((_d = (_c = options.logger) === null || _c === void 0 ? void 0 : _c.level) !== null && _d !== void 0 ? _d : 30 /* Info */);
         this.i18n = (_f = (_e = options.i18n) === null || _e === void 0 ? void 0 : _e.instance) !== null && _f !== void 0 ? _f : new Internationalization_1.Internationalization((_h = (_g = options.i18n) === null || _g === void 0 ? void 0 : _g.defaultName) !== null && _h !== void 0 ? _h : 'en-US');
+        this.fetchPrefix = (_j = options.fetchPrefix) !== null && _j !== void 0 ? _j : (() => { var _a; return (_a = this.options.defaultPrefix) !== null && _a !== void 0 ? _a : null; });
         for (const plugin of SapphireClient.plugins.values("preInitialization" /* PreInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
-        this.id = (_j = options.id) !== null && _j !== void 0 ? _j : null;
+        this.id = (_k = options.id) !== null && _k !== void 0 ? _k : null;
         this.arguments = new ArgumentStore_1.ArgumentStore(this).registerPath(path_1.join(__dirname, '..', 'arguments'));
         this.commands = new CommandStore_1.CommandStore(this);
         this.events = new EventStore_1.EventStore(this).registerPath(path_1.join(__dirname, '..', 'events'));
@@ -120,12 +138,19 @@ class SapphireClient extends discord_js_1.Client {
      * @retrun Token of the account used.
      */
     async login(token) {
+        // Register the user directory if not null:
+        if (this.options.baseUserDirectory !== null) {
+            this.registerUserDirectories(this.options.baseUserDirectory);
+        }
+        // Call pre-login plugins:
         for (const plugin of SapphireClient.plugins.values("preLogin" /* PreLogin */)) {
             await plugin.hook.call(this, this.options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
+        // Loads all stores, then call login:
         await Promise.all([...this.stores].map((store) => store.loadAll()));
         const login = await super.login(token);
+        // Call post-login plugins:
         for (const plugin of SapphireClient.plugins.values("postLogin" /* PostLogin */)) {
             await plugin.hook.call(this, this.options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);

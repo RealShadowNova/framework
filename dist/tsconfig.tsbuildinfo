@@ -647,8 +647,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/structures/Argument.ts": {
-        "version": "9113a80bc472582612b3d7bc12eb034caf79bb5fa554a552620bc88720926790",
-        "signature": "ce11e2d981bfa73335bb49b202bef466b31792be13320ba81399336a7d59853f",
+        "version": "780e1985a0e4a3f2fd719c28858fbcdd366d7c8ce1fe4a5fd9c8e2b998a0976a",
+        "signature": "6f4470ecc2c8722a0e346f5d0d532bf1104dc9438b98c15552bb521edef2a64f",
         "affectsGlobalScope": false
       },
       "../src/lib/errors/ArgumentError.ts": {
@@ -677,8 +677,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/structures/Event.ts": {
-        "version": "6de7c99c222f56f9da16b2921e07b1672d0fedcf17fe9e50dc110d64782edd96",
-        "signature": "624b0b0f088e3e0c716c5dcbe7c68d45cff62815528b93cb26706c0d69f2bbb4",
+        "version": "34257327d567ae7b77dc5e8067bc9cfe81c52e9384c274784c4da29688573e07",
+        "signature": "79dad2ea77ac336cdaa5bcdb6577baee9cc530ae752e19b42bfd9df3628743ef",
         "affectsGlobalScope": false
       },
       "../src/lib/types/Events.ts": {
@@ -727,8 +727,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/utils/logger/ILogger.ts": {
-        "version": "33ffcc35488b101b3742419a02202936c4bf31ff5341a6a3ba405832540e7aea",
-        "signature": "a37f1603d7e7a7ca95fd5e7e3f1aa06ec4132c1d11619dae4befaa9e6f9fa25e",
+        "version": "0e6ccdfd8976bcc3b295b70a7ec568b2f1b4226b7455790fbbfc238b19c91bbd",
+        "signature": "2297de36a6cb93d8ed6288023c0fa3d08197f6cd046ef823d6e37a1d529eba29",
         "affectsGlobalScope": false
       },
       "../src/lib/utils/logger/Logger.ts": {
@@ -742,8 +742,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/SapphireClient.ts": {
-        "version": "be12c0b3355802e9a5f5ff0942491a73d4a02acebcdbcaf0201a0dd7b181bba2",
-        "signature": "997bbb033c880be894f0de2abdfda08b62267d57cea097b6109df0a640b0dee6",
+        "version": "a6dc86c922a7557531117f411957b10bf9d8cc8c970b018610bd708e9dcb8076",
+        "signature": "152b203a806da9523243e552982a97ba6e8dc4fc1e574ed8bb30d01ef3ed4284",
         "affectsGlobalScope": false
       },
       "../src/lib/plugins/Plugin.ts": {
