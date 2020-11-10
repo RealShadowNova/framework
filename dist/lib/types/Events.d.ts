@@ -1,7 +1,7 @@
 import type { Piece, Store } from '@sapphire/pieces';
 import type { Message } from 'discord.js';
 import type { UserError } from '../errors/UserError';
-import type { Command } from '../structures/Command';
+import type { Command, CommandContext } from '../structures/Command';
 import type { Event } from '../structures/Event';
 import type { PluginHook } from './Enums';
 export declare enum Events {
@@ -87,11 +87,11 @@ export interface ICommandPayload {
 }
 export interface CommandDeniedPayload extends ICommandPayload {
     parameters: string;
-    commandName: string;
-    prefix: string;
+    context: CommandContext;
 }
 export interface CommandAcceptedPayload extends ICommandPayload {
     parameters: string;
+    context: CommandContext;
 }
 export interface CommandSuccessPayload extends ICommandPayload {
     result: unknown;

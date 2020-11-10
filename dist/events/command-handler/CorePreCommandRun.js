@@ -9,22 +9,21 @@ class CoreEvent extends Event_1.Event {
     constructor(context) {
         super(context, { event: Events_1.Events.PreCommandRun });
     }
-    async run({ message, command, parameters, commandName, prefix }) {
+    async run({ message, command, parameters, context }) {
         if (!command.enabled) {
             this.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError('CommandDisabled', 'This command is disabled.'), {
                 message,
                 command,
                 parameters,
-                commandName,
-                prefix
+                context
             });
         }
         const result = await command.preconditions.run(message, command);
         if (Result_1.isErr(result)) {
-            this.client.emit(Events_1.Events.CommandDenied, result.error, { message, command, parameters, commandName, prefix });
+            this.client.emit(Events_1.Events.CommandDenied, result.error, { message, command, parameters, context });
         }
         else {
-            this.client.emit(Events_1.Events.CommandAccepted, { message, command, parameters });
+            this.client.emit(Events_1.Events.CommandAccepted, { message, command, parameters, context });
         }
     }
 }
