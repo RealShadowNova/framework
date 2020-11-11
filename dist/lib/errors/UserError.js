@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserError = void 0;
 /**
  * The UserError class to be emitted in the pieces.
+ * @property name This will be `'UserError'` and can be used to distinguish the type of error when any error gets thrown
  */
 class UserError extends Error {
     /**
@@ -12,6 +13,7 @@ class UserError extends Error {
      */
     constructor(type, message) {
         super(message);
+        this.name = 'UserError';
         this.identifier = type;
     }
 }

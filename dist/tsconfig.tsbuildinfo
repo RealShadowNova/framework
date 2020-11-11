@@ -517,8 +517,8 @@
         "affectsGlobalScope": true
       },
       "../src/lib/errors/UserError.ts": {
-        "version": "a69bd2ca6538028a1b3df185c3d8bd5048598d09af21511a3c7eb64ba1cbaa4f",
-        "signature": "f4a595bdb04795ac41465d07f48bbe77f74bb83e9983568f1a93b8587662d32f",
+        "version": "cce53571ff7293539640d91bd25f2d530f1e64c2810390a71316c87a225f3421",
+        "signature": "bd980c64e9ba95273692e1d1824366f9e05763b23251a1a6723545650d6631b2",
         "affectsGlobalScope": false
       },
       "../node_modules/lexure/dist/types/tokens.d.ts": {
@@ -597,8 +597,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/errors/PreconditionError.ts": {
-        "version": "154b37097ea3fb7d39096c77f0fc19e2c6cfc9b7e12c17b9ea40af52c58ca842",
-        "signature": "e0cbe717e98ff681bda590aec51cffb68b7f360e1fb0d3793e3ba0a3f48b9eca",
+        "version": "477e72b5cddc83c7a29ab5bf2d12aed502a8b217b6fad2813eb9900a6e7e5c5e",
+        "signature": "b2ca0c60d64558cc0463b59668d86e5c0b890cb22672085c42b2f88e0173f042",
         "affectsGlobalScope": false
       },
       "../src/lib/structures/base/BasePiece.ts": {
@@ -652,8 +652,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/errors/ArgumentError.ts": {
-        "version": "cef0136a3b0b9a824ccaa91801c94e95ca411a23d179a5de1b7a452af8b87dd0",
-        "signature": "4305e737f5b36173abdb2d12f5a1e397f43d39a995a7a72f8c842e9e7febe460",
+        "version": "c91aa64d1dd01a61ecf8399714fb4d1e97c0e5bbc259913258b840ec1e90492e",
+        "signature": "c86c8d328e4391f724be936439fefc5f6fae30e2bf2fba4d96725b4e6d1e5696",
         "affectsGlobalScope": false
       },
       "../src/lib/extensions/SapphireMessage.ts": {
