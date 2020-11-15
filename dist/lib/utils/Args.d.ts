@@ -293,6 +293,7 @@ export declare class Args {
     static error<T>(argument: IArgument<T>, parameter: string, type: string, message: string): ArgumentError<T>;
 }
 export interface ArgType {
+    boolean: boolean;
     channel: Channel;
     date: Date;
     dmChannel: DMChannel;
