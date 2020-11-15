@@ -761,6 +761,11 @@
         "signature": "32fd28bc6b09e6fe83ec4274613628a8266c3c2bfc4beeed93b6b58f256903ea",
         "affectsGlobalScope": false
       },
+      "../src/arguments/CoreBoolean.ts": {
+        "version": "c9a868997d14045978f93a69595d11ba5ed25e2961c05c03c5e80942ff40c70e",
+        "signature": "a661dade93309b028eae3dc068ab41f22a0aae67c712af6dd2a4ab248e58938a",
+        "affectsGlobalScope": false
+      },
       "../src/arguments/CoreChannel.ts": {
         "version": "823867186d9c6b71f1efbda946646b043977e17c473a883b728a20f33466bb3b",
         "signature": "07f416c5ab618633a36268cec96a3f54ab21fae08daad98018e455abcd8cae68",
@@ -1390,6 +1395,10 @@
         "../node_modules/lexure/dist/types/loopAction.d.ts",
         "../node_modules/lexure/dist/types/option.d.ts",
         "../node_modules/lexure/dist/types/result.d.ts"
+      ],
+      "../src/arguments/CoreBoolean.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../src/lib/structures/Argument.ts"
       ],
       "../src/arguments/CoreChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -2071,6 +2080,10 @@
         "../node_modules/lexure/dist/types/option.d.ts",
         "../node_modules/lexure/dist/types/result.d.ts"
       ],
+      "../src/arguments/CoreBoolean.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../src/lib/structures/Argument.ts"
+      ],
       "../src/arguments/CoreChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
@@ -2552,6 +2565,7 @@
       "../node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "../node_modules/typescript/lib/lib.esnext.promise.d.ts",
       "../node_modules/typescript/lib/lib.esnext.string.d.ts",
+      "../src/arguments/CoreBoolean.ts",
       "../src/arguments/CoreChannel.ts",
       "../src/arguments/CoreDMChannel.ts",
       "../src/arguments/CoreDate.ts",
