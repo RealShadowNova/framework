@@ -852,7 +852,7 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CorePreCommandRun.ts": {
-        "version": "d34fd91d5e008fda0a19c447ed3b6b18dfd16675ced60d83cf29116b416d85d2",
+        "version": "484364658437d2c67ada41011a8751015dbb4ed5251050aaeea0ee721e1e03c8",
         "signature": "e0ff433853b4585d4b80341da390d6f292278521475f9afdf4eab5b75cc529d0",
         "affectsGlobalScope": false
       },

@@ -17,6 +17,7 @@ class CoreEvent extends Event_1.Event {
                 parameters,
                 context
             });
+            return;
         }
         const result = await command.preconditions.run(message, command);
         if (Result_1.isErr(result)) {
