@@ -5,35 +5,25 @@ const Argument_1 = require("../lib/structures/Argument");
 class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'role' });
+        this.roleRegex = /^(?:<@&)?(\d{17,19})>?$/;
     }
     async run(argument, context) {
-        var _a, _b;
+        var _a;
         const { guild } = context.message;
         if (!guild) {
             return this.error(argument, 'ArgumentRoleMissingGuild', 'The argument must be run on a guild.');
         }
-        const role = (_b = (_a = (await this.parseID(argument, guild))) !== null && _a !== void 0 ? _a : (await this.parseMention(argument, guild))) !== null && _b !== void 0 ? _b : (await this.parseQuery(argument, guild));
+        const role = (_a = (await this.resolveByID(argument, guild))) !== null && _a !== void 0 ? _a : this.resolveByQuery(argument, guild);
         return role ? this.ok(role) : this.error(argument, 'ArgumentRoleUnknownRole', 'The argument did not resolve to a role.');
     }
-    async parseID(argument, guild) {
-        if (/^\d{17,19}$/.test(argument)) {
-            try {
-                return await guild.roles.fetch(argument);
-            }
-            catch {
-                // noop
-            }
-        }
-        return null;
+    async resolveByID(argument, guild) {
+        const roleID = this.roleRegex.exec(argument);
+        return roleID ? guild.roles.fetch(roleID[1]).catch(() => null) : null;
     }
-    async parseMention(argument, guild) {
-        const mention = /^<@&(\d{17,19})>$/.exec(argument);
-        return mention ? this.parseID(mention[1], guild) : null;
-    }
-    async parseQuery(argument, guild) {
+    resolveByQuery(argument, guild) {
+        var _a;
         const lowerCaseArgument = argument.toLowerCase();
-        const role = await guild.roles.cache.find((role) => role.name.toLowerCase() === lowerCaseArgument);
-        return role !== null && role !== void 0 ? role : null;
+        return (_a = guild.roles.cache.find((role) => role.name.toLowerCase() === lowerCaseArgument)) !== null && _a !== void 0 ? _a : null;
     }
 }
 exports.CoreArgument = CoreArgument;
