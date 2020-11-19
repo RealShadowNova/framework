@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import type { Channel, DMChannel, GuildMember, Message, NewsChannel, Role, TextChannel, User, VoiceChannel } from 'discord.js';
+import type { Channel, DMChannel, GuildChannel, GuildMember, Message, NewsChannel, Role, TextChannel, User, VoiceChannel } from 'discord.js';
 import type * as Lexure from 'lexure';
 import type { URL } from 'url';
 import { ArgumentError } from '../errors/ArgumentError';
@@ -298,6 +298,7 @@ export interface ArgType {
     date: Date;
     dmChannel: DMChannel;
     float: number;
+    guildChannel: GuildChannel;
     hyperlink: URL;
     integer: number;
     member: GuildMember;

@@ -642,8 +642,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/utils/Args.ts": {
-        "version": "93e16ffa7df12f44ccc3cfcd1acb76dacf1497a32d1febedcebd2a1b59016d59",
-        "signature": "a0969f9053a6cdfaf43e941c5d454f601a6e40d40a9a0f6046270ee372f3b12d",
+        "version": "ce264c4d0e3c62b81fc5f9abf7a6ecbcc3a88e0a87e3807e321d4ccd6365be80",
+        "signature": "fcd513ab5970799446a48a39ff16ad19cdd05d648e8458693bc6c0bda120a112",
         "affectsGlobalScope": false
       },
       "../src/lib/structures/Argument.ts": {
@@ -791,6 +791,11 @@
         "signature": "e4904c4c799cf64ad39109f05b429a71103bd62ce6ee2882433e3174c1391189",
         "affectsGlobalScope": false
       },
+      "../src/arguments/CoreGuildChannel.ts": {
+        "version": "21ca4061997b67b6ea72a6b29cfd572fa70a80b52c5ed05c6346bf6e6293c62a",
+        "signature": "4bc5a9959b951310a6269be2ef13fb912f5f23a526262ebdb5d01f0391e232c3",
+        "affectsGlobalScope": false
+      },
       "../src/arguments/CoreHyperlink.ts": {
         "version": "eaf71e4fc126400d7a5bb914be390654cdd95727fe0f2019fb0444b85badf4e1",
         "signature": "6a9216db5cf1df4b2dfe364a6b79435ad09828c0a7562309e925fb0b5f86fa68",
@@ -807,8 +812,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreNewsChannel.ts": {
-        "version": "87bfdcda0537049fca4bf6c2c843aa34cea402be7cd7534fda71337e8c1e64eb",
-        "signature": "fac7c5ea09dee14c2884c3dc11bee1980f7898e0de853011f09c566b44c14d24",
+        "version": "dc5d3b062abbc9760c5cdb15e746fbcc7bdb69f656f886ffd3cbb23f80adabda",
+        "signature": "92872fff27e57c16e792f1283f4694d2a376c80f1be490ef41bf8e28b21bf580",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreNumber.ts": {
@@ -827,8 +832,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreTextChannel.ts": {
-        "version": "7980ec48dd0fe7fd36d41a3893dc2f0592451d6177c7ae09e67f5be99fc79a45",
-        "signature": "28d646351270e6b88d371423c08b53ce5d81ab529681764757ad4f099877672c",
+        "version": "925e0fe6d35332ea8b35dbf3ecf4ad1ef19f29f189a6569c277a28a86dc6864a",
+        "signature": "0e07c7a1f942272dd48efeba1d8b0752a0d6a824de7e68b8826dec1552a8a5ab",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreUser.ts": {
@@ -837,8 +842,8 @@
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreVoiceChannel.ts": {
-        "version": "12868113f7f354399a3edfb6156cfa92d8c7843b8c1d950231c565134c7740f0",
-        "signature": "1b5b45570b070e50ea885d9cc58d4d23858657d0e95bead4d4dca3bf5c3e9215",
+        "version": "573e941d396cbbe33cb2cf16af57796909691a61bcf8c32e6e68ee4c61859587",
+        "signature": "24567ba18705f8d1d86ceda63176222e91419017ce71336bca4539ac4f77dc04",
         "affectsGlobalScope": false
       },
       "../src/events/CoreReady.ts": {
@@ -1423,6 +1428,11 @@
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../src/lib/structures/Argument.ts"
       ],
+      "../src/arguments/CoreGuildChannel.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../src/lib/structures/Argument.ts"
+      ],
       "../src/arguments/CoreHyperlink.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/@types/node/url.d.ts",
@@ -1440,7 +1450,8 @@
       "../src/arguments/CoreNewsChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/arguments/CoreNumber.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -1458,7 +1469,8 @@
       "../src/arguments/CoreTextChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/arguments/CoreUser.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -1468,7 +1480,8 @@
       "../src/arguments/CoreVoiceChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/events/CoreReady.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -2115,6 +2128,11 @@
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../src/lib/structures/Argument.ts"
       ],
+      "../src/arguments/CoreGuildChannel.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../node_modules/discord.js/typings/index.d.ts",
+        "../src/lib/structures/Argument.ts"
+      ],
       "../src/arguments/CoreHyperlink.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/@types/node/url.d.ts",
@@ -2132,7 +2150,8 @@
       "../src/arguments/CoreNewsChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/arguments/CoreNumber.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -2150,7 +2169,8 @@
       "../src/arguments/CoreTextChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/arguments/CoreUser.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -2160,7 +2180,8 @@
       "../src/arguments/CoreVoiceChannel.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
-        "../src/lib/structures/Argument.ts"
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/structures/ExtendedArgument.ts"
       ],
       "../src/events/CoreReady.ts": [
         "../node_modules/@sapphire/pieces/dist/index.d.ts",
@@ -2590,6 +2611,7 @@
       "../src/arguments/CoreDMChannel.ts",
       "../src/arguments/CoreDate.ts",
       "../src/arguments/CoreFloat.ts",
+      "../src/arguments/CoreGuildChannel.ts",
       "../src/arguments/CoreHyperlink.ts",
       "../src/arguments/CoreInteger.ts",
       "../src/arguments/CoreMember.ts",

@@ -1,20 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
-const Argument_1 = require("../lib/structures/Argument");
-class CoreArgument extends Argument_1.Argument {
+const ExtendedArgument_1 = require("../lib/structures/ExtendedArgument");
+class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     constructor(context) {
-        super(context, { name: 'voiceChannel' });
+        super(context, {
+            name: 'voiceChannel',
+            baseArgument: 'guildChannel'
+        });
     }
-    run(argument, context) {
-        const channel = (context.message.guild ? context.message.guild.channels : this.client.channels).cache.get(argument);
-        if (!channel) {
-            return this.error(argument, 'ArgumentChannelMissingChannel', 'The argument did not resolve to a channel.');
-        }
-        if (channel.type !== 'voice') {
-            return this.error(argument, 'ArgumentVoiceChannelInvalidChannel', 'The argument did not resolve to a voice channel.');
-        }
-        return this.ok(channel);
+    handle(channel, { argument }) {
+        return channel.type === 'voice'
+            ? this.ok(channel)
+            : this.error(argument, 'ArgumentVoiceChannelInvalidChannel', 'The argument did not resolve to a voice channel.');
     }
 }
 exports.CoreArgument = CoreArgument;
