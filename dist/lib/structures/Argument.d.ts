@@ -1,3 +1,4 @@
+import type { AliasPieceOptions } from '@sapphire/pieces';
 import type { Message } from 'discord.js';
 import type { UserError } from '../errors/UserError';
 import { Result } from '../utils/Result';
@@ -100,6 +101,8 @@ export declare abstract class Argument<T = unknown> extends BaseAliasPiece imple
      * @param message The description message for the rejection.
      */
     error(parameter: string, type: string, message: string): ArgumentResult<T>;
+}
+export interface ArgumentOptions extends AliasPieceOptions {
 }
 export interface ArgumentContext extends Record<PropertyKey, unknown> {
     message: Message;

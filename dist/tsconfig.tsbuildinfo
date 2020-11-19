@@ -647,8 +647,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/structures/Argument.ts": {
-        "version": "780e1985a0e4a3f2fd719c28858fbcdd366d7c8ce1fe4a5fd9c8e2b998a0976a",
-        "signature": "6f4470ecc2c8722a0e346f5d0d532bf1104dc9438b98c15552bb521edef2a64f",
+        "version": "10b75c507b136efe3479f07e325a516130322a559abe81713029c0313e883d0d",
+        "signature": "ba44bb05325f71c1bf32404c7f60672ac6f4753ec8814a70e5df684dee7c65c7",
         "affectsGlobalScope": false
       },
       "../src/lib/errors/ArgumentError.ts": {
@@ -751,14 +751,19 @@
         "signature": "ed7627677f086c977409f612133d4b39d17a3c7bbc52846ea5a27c12f88b0a86",
         "affectsGlobalScope": false
       },
+      "../src/lib/structures/ExtendedArgument.ts": {
+        "version": "d0f48fce101d42ba22afc3d7f9681b7a6bf74a722bb2f687f1ffb18a25aed557",
+        "signature": "9040c31921610863c573f1c31f8be570adb7f9c980456ba1dce9ca721f31f52e",
+        "affectsGlobalScope": false
+      },
       "../src/lib/utils/preconditions/containers/PermissionsPrecondition.ts": {
         "version": "1e732f965cb3a676e0f298f7ff8545cb598fc4d4b0f95b1f2e5e723a6a1a78df",
         "signature": "a2dd44ffb52fee74eb2469a685c0abcea5c9be3b64ebd9e2e6fa1d68208cd1d5",
         "affectsGlobalScope": false
       },
       "../src/index.ts": {
-        "version": "47dc0494d011cab5e3a4c1fa19467c3bd5eb60c91c4d8772fadeb70b616bc278",
-        "signature": "32fd28bc6b09e6fe83ec4274613628a8266c3c2bfc4beeed93b6b58f256903ea",
+        "version": "0d93d7c4355282cd45e7e2398bacc150a769d96cf84dcfa3210c841ea543010a",
+        "signature": "f0368fd275b87a856d737abec8b80e3d13d3e95c6efdeee158504c3bc390286a",
         "affectsGlobalScope": false
       },
       "../src/arguments/CoreBoolean.ts": {
@@ -1509,6 +1514,7 @@
         "../src/lib/structures/CommandStore.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/structures/EventStore.ts",
+        "../src/lib/structures/ExtendedArgument.ts",
         "../src/lib/structures/Precondition.ts",
         "../src/lib/structures/PreconditionStore.ts",
         "../src/lib/structures/base/BaseAliasPiece.ts",
@@ -1577,6 +1583,7 @@
         "../src/lib/utils/Types.ts"
       ],
       "../src/lib/structures/Argument.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/lib/errors/UserError.ts",
         "../src/lib/structures/Command.ts",
@@ -1618,6 +1625,12 @@
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/structures/base/BaseStore.ts"
+      ],
+      "../src/lib/structures/ExtendedArgument.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/utils/Args.ts",
+        "../src/lib/utils/Result.ts"
       ],
       "../src/lib/structures/Precondition.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
@@ -2191,6 +2204,7 @@
         "../src/lib/structures/CommandStore.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/structures/EventStore.ts",
+        "../src/lib/structures/ExtendedArgument.ts",
         "../src/lib/structures/Precondition.ts",
         "../src/lib/structures/PreconditionStore.ts",
         "../src/lib/structures/base/BaseAliasPiece.ts",
@@ -2252,6 +2266,7 @@
         "../src/lib/utils/Types.ts"
       ],
       "../src/lib/structures/Argument.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/lib/errors/UserError.ts",
         "../src/lib/structures/Command.ts",
@@ -2291,6 +2306,11 @@
         "../node_modules/discord.js/typings/index.d.ts",
         "../src/lib/structures/Event.ts",
         "../src/lib/structures/base/BaseStore.ts"
+      ],
+      "../src/lib/structures/ExtendedArgument.ts": [
+        "../node_modules/@sapphire/pieces/dist/index.d.ts",
+        "../src/lib/structures/Argument.ts",
+        "../src/lib/utils/Args.ts"
       ],
       "../src/lib/structures/Precondition.ts": [
         "../node_modules/discord.js/typings/index.d.ts",
@@ -2600,6 +2620,7 @@
       "../src/lib/structures/CommandStore.ts",
       "../src/lib/structures/Event.ts",
       "../src/lib/structures/EventStore.ts",
+      "../src/lib/structures/ExtendedArgument.ts",
       "../src/lib/structures/Precondition.ts",
       "../src/lib/structures/PreconditionStore.ts",
       "../src/lib/structures/base/BaseAliasPiece.ts",
