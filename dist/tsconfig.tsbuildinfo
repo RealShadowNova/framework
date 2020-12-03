@@ -752,8 +752,8 @@
         "affectsGlobalScope": false
       },
       "../src/lib/SapphireClient.ts": {
-        "version": "a6dc86c922a7557531117f411957b10bf9d8cc8c970b018610bd708e9dcb8076",
-        "signature": "152b203a806da9523243e552982a97ba6e8dc4fc1e574ed8bb30d01ef3ed4284",
+        "version": "decf3bfd558ef062b64629312d0a91e9c4c68f2363e6f469cf537d8a54406807",
+        "signature": "00a77ef796dcb46681842d38f3535ddcd3a783e66885a3b998584258620f2ca4",
         "affectsGlobalScope": false
       },
       "../src/lib/plugins/Plugin.ts": {
@@ -877,7 +877,7 @@
         "affectsGlobalScope": false
       },
       "../src/events/command-handler/CorePrefixedMessage.ts": {
-        "version": "d2c212864f15b4dd2469806d7bff559800cbb48897f1c9bfc4c2bbf0efa78497",
+        "version": "a42cc3ef835f3193629a7ccbe964a40d657b875c5195a5fdbc95ef7b5670262b",
         "signature": "3849541f6d478e9fe6059b11b180b521d33e3250b6d7b2f6fcd184b9f0379b1a",
         "affectsGlobalScope": false
       },

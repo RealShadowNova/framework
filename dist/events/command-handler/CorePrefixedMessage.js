@@ -17,7 +17,7 @@ class CoreEvent extends Event_1.Event {
             return;
         }
         // Retrieve the command and validate:
-        const command = this.client.commands.get(name);
+        const command = this.client.commands.get(this.client.options.caseInsensitiveCommands ? name.toLowerCase() : name);
         if (!command) {
             this.client.emit(Events_1.Events.UnknownCommand, message, name, prefix);
             return;
