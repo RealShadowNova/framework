@@ -51,7 +51,7 @@ var Events;
     Events["WebhookUpdate"] = "webhookUpdate";
     Events["ShardDisconnect"] = "shardDisconnect";
     Events["ShardError"] = "shardError";
-    Events["SharedReady"] = "shardReady";
+    Events["ShardReady"] = "shardReady";
     Events["ShardReconnecting"] = "shardReconnecting";
     Events["ShardResume"] = "shardResume";
     // #endregion Discord.js base events

@@ -52,7 +52,7 @@ export declare enum Events {
     WebhookUpdate = "webhookUpdate",
     ShardDisconnect = "shardDisconnect",
     ShardError = "shardError",
-    SharedReady = "shardReady",
+    ShardReady = "shardReady",
     ShardReconnecting = "shardReconnecting",
     ShardResume = "shardResume",
     PieceUnload = "pieceUnload",
