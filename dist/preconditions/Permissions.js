@@ -22,7 +22,7 @@ class CorePrecondition extends Precondition_1.Precondition {
         var _a;
         const required = (_a = context.permissions) !== null && _a !== void 0 ? _a : new discord_js_1.Permissions(0);
         const permissions = message.guild
-            ? message.channel.permissionsFor(this.client.id)
+            ? message.channel.permissionsFor(message.client.id)
             : this.dmChannelPermissions;
         const missing = permissions.missing(required);
         return missing.length === 0 ? this.ok() : this.error(this.name, 'I am missing permissions to run this command.', missing);

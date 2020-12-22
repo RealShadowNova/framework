@@ -27,12 +27,12 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _lexer;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Command = void 0;
+const pieces_1 = require("@sapphire/pieces");
 const Lexure = __importStar(require("lexure"));
 const Args_1 = require("../utils/Args");
 const PreconditionContainer_1 = require("../utils/preconditions/PreconditionContainer");
 const FlagUnorderedStrategy_1 = require("../utils/strategies/FlagUnorderedStrategy");
-const BaseAliasPiece_1 = require("./base/BaseAliasPiece");
-class Command extends BaseAliasPiece_1.BaseAliasPiece {
+class Command extends pieces_1.AliasPiece {
     /**
      * @since 1.0.0
      * @param context The context.
@@ -50,7 +50,7 @@ class Command extends BaseAliasPiece_1.BaseAliasPiece {
         _lexer.set(this, new Lexure.Lexer());
         this.description = (_a = options.description) !== null && _a !== void 0 ? _a : '';
         this.detailedDescription = (_b = options.detailedDescription) !== null && _b !== void 0 ? _b : '';
-        this.preconditions = new PreconditionContainer_1.PreconditionContainerAll(this.client, (_c = options.preconditions) !== null && _c !== void 0 ? _c : []);
+        this.preconditions = new PreconditionContainer_1.PreconditionContainerAll(this.context.client, (_c = options.preconditions) !== null && _c !== void 0 ? _c : []);
         this.strategy = new FlagUnorderedStrategy_1.FlagUnorderedStrategy((_d = options.strategyOptions) !== null && _d !== void 0 ? _d : {});
         __classPrivateFieldGet(this, _lexer).setQuotes((_e = options.quotes) !== null && _e !== void 0 ? _e : [
             ['"', '"'],

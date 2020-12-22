@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SapphireClient = void 0;
+const pieces_1 = require("@sapphire/pieces");
 const discord_js_1 = require("discord.js");
 const path_1 = require("path");
 const PluginManager_1 = require("./plugins/PluginManager");
@@ -69,6 +70,7 @@ class SapphireClient extends discord_js_1.Client {
          * @since 1.0.0
          */
         this.id = null;
+        pieces_1.Store.injectedContext.client = this;
         for (const plugin of SapphireClient.plugins.values("preGenericsInitialization" /* PreGenericsInitialization */)) {
             plugin.hook.call(this, options);
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
@@ -81,10 +83,10 @@ class SapphireClient extends discord_js_1.Client {
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
         this.id = (_k = options.id) !== null && _k !== void 0 ? _k : null;
-        this.arguments = new ArgumentStore_1.ArgumentStore(this).registerPath(path_1.join(__dirname, '..', 'arguments'));
-        this.commands = new CommandStore_1.CommandStore(this);
-        this.events = new EventStore_1.EventStore(this).registerPath(path_1.join(__dirname, '..', 'events'));
-        this.preconditions = new PreconditionStore_1.PreconditionStore(this).registerPath(path_1.join(__dirname, '..', 'preconditions'));
+        this.arguments = new ArgumentStore_1.ArgumentStore().registerPath(path_1.join(__dirname, '..', 'arguments'));
+        this.commands = new CommandStore_1.CommandStore();
+        this.events = new EventStore_1.EventStore().registerPath(path_1.join(__dirname, '..', 'events'));
+        this.preconditions = new PreconditionStore_1.PreconditionStore().registerPath(path_1.join(__dirname, '..', 'preconditions'));
         this.stores = new Set();
         this.registerStore(this.arguments) //
             .registerStore(this.commands)

@@ -21,33 +21,34 @@ class CoreEvent extends Event_1.Event {
         const mentionPrefix = this.getMentionPrefix(message.content);
         if (mentionPrefix) {
             if (message.content.length === mentionPrefix.length) {
-                this.client.emit(Events_1.Events.MentionPrefixOnly, message);
+                message.client.emit(Events_1.Events.MentionPrefixOnly, message);
                 return;
             }
             prefix = mentionPrefix;
         }
         else {
-            const prefixes = await this.client.fetchPrefix(message);
+            const prefixes = await message.client.fetchPrefix(message);
             const parsed = this.getPrefix(message.content, prefixes);
             if (parsed !== null)
                 prefix = parsed;
         }
         if (prefix !== null)
-            this.client.emit(Events_1.Events.PrefixedMessage, message, prefix);
+            message.client.emit(Events_1.Events.PrefixedMessage, message, prefix);
     }
     async canRunInChannel(message) {
         var _a;
         if (message.channel.type === 'dm')
             return true;
-        const me = (_a = message.guild.me) !== null && _a !== void 0 ? _a : (this.client.id ? await message.guild.members.fetch(this.client.id) : null);
+        const me = (_a = message.guild.me) !== null && _a !== void 0 ? _a : (message.client.id ? await message.guild.members.fetch(message.client.id) : null);
         if (!me)
             return false;
         const channel = message.channel;
         return channel.permissionsFor(me).has(this.requiredPermissions, false);
     }
     getMentionPrefix(content) {
+        const { id } = this.context.client;
         // If no client ID was specified, return null:
-        if (!this.client.id)
+        if (!id)
             return null;
         // If the content is shorter than `<@{n}>` or doesn't start with `<@`, skip early:
         if (content.length < 20 || !content.startsWith('<@'))
@@ -55,13 +56,13 @@ class CoreEvent extends Event_1.Event {
         // Retrieve whether the mention is a nickname mention (`<@!{n}>`) or not (`<@{n}>`).
         const nickname = content[2] === '!';
         const idOffset = (nickname ? 3 : 2);
-        const idLength = this.client.id.length;
+        const idLength = id.length;
         // If the mention doesn't end with `>`, skip early:
         if (content[idOffset + idLength] !== '>')
             return null;
         // Check whether or not the ID is the same as the client ID:
         const mentionID = content.substr(idOffset, idLength);
-        if (mentionID === this.client.id)
+        if (mentionID === id)
             return content.substr(0, idOffset + idLength + 1);
         return null;
     }

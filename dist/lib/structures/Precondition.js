@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Precondition = void 0;
+const pieces_1 = require("@sapphire/pieces");
 const PreconditionError_1 = require("../errors/PreconditionError");
 const Result_1 = require("../utils/Result");
-const BasePiece_1 = require("./base/BasePiece");
-class Precondition extends BasePiece_1.BasePiece {
+class Precondition extends pieces_1.Piece {
     ok() {
         return Result_1.ok();
     }

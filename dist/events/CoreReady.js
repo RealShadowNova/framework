@@ -8,9 +8,9 @@ class CoreEvent extends Event_1.Event {
         super(context, { event: Events_1.Events.Ready, once: true });
     }
     run() {
-        var _a, _b;
-        if (!this.client.id)
-            this.client.id = (_b = (_a = this.client.user) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : null;
+        var _a, _b, _c;
+        var _d;
+        (_a = (_d = this.context.client).id) !== null && _a !== void 0 ? _a : (_d.id = (_c = (_b = this.context.client.user) === null || _b === void 0 ? void 0 : _b.id) !== null && _c !== void 0 ? _c : null);
     }
 }
 exports.CoreEvent = CoreEvent;

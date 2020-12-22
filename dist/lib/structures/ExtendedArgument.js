@@ -14,7 +14,7 @@ const Argument_1 = require("./Argument");
  * ```typescript
  * // TypeScript:
  * import { ApplyOptions } from '@sapphire/decorators';
- * import { ArgumentResult, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions } from '@sapphire/framework';
+ * import { ArgumentResult, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions } from '(at)sapphire/framework';
  * import type { Channel, TextChannel } from 'discord.js';
  *
  * // Just like with `Argument`, you can use `export default` or `export =` too.
@@ -34,7 +34,7 @@ const Argument_1 = require("./Argument");
  * @example
  * ```javascript
  * // JavaScript:
- * const { ExtendedArgument } = require('@sapphire/framework');
+ * const { ExtendedArgument } = require('(at)sapphire/framework');
  *
  * module.exports = class TextChannelArgument extends ExtendedArgument {
  *   constructor(context) {
@@ -59,7 +59,7 @@ class ExtendedArgument extends Argument_1.Argument {
      * into the value used to compute the extended argument's value.
      */
     get base() {
-        return this.client.arguments.get(this.baseArgument);
+        return this.context.client.arguments.get(this.baseArgument);
     }
     async run(argument, context) {
         const result = await this.base.run(argument, context);

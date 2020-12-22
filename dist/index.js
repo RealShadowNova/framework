@@ -23,10 +23,6 @@ __exportStar(require("./lib/plugins/symbols"), exports);
 __exportStar(require("./lib/SapphireClient"), exports);
 __exportStar(require("./lib/structures/Argument"), exports);
 __exportStar(require("./lib/structures/ArgumentStore"), exports);
-__exportStar(require("./lib/structures/base/BaseAliasPiece"), exports);
-__exportStar(require("./lib/structures/base/BaseAliasStore"), exports);
-__exportStar(require("./lib/structures/base/BasePiece"), exports);
-__exportStar(require("./lib/structures/base/BaseStore"), exports);
 __exportStar(require("./lib/structures/Command"), exports);
 __exportStar(require("./lib/structures/CommandStore"), exports);
 __exportStar(require("./lib/structures/Event"), exports);
@@ -47,5 +43,4 @@ __exportStar(require("./lib/utils/preconditions/PreconditionContainer"), exports
 __exportStar(require("./lib/utils/preconditions/PreconditionContainerAny"), exports);
 __exportStar(require("./lib/utils/preconditions/PreconditionContainerSimple"), exports);
 __exportStar(require("./lib/utils/Result"), exports);
-__exportStar(require("./lib/utils/Types"), exports);
 //# sourceMappingURL=index.js.map

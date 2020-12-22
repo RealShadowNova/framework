@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Argument = void 0;
+const pieces_1 = require("@sapphire/pieces");
 const Args_1 = require("../utils/Args");
 const Result_1 = require("../utils/Result");
-const BaseAliasPiece_1 = require("./base/BaseAliasPiece");
 /**
  * The base argument class. This class is abstract and is to be extended by subclasses implementing the methods. In
  * Sapphire's workflow, arguments are called when using [[Args]]'s methods (usually used inside [[Command]]s by default).
@@ -11,7 +11,7 @@ const BaseAliasPiece_1 = require("./base/BaseAliasPiece");
  * @example
  * ```typescript
  * // TypeScript:
- * import { Argument, ArgumentResult, PieceContext } from 'sapphire/framework';
+ * import { Argument, ArgumentResult, PieceContext } from '(at)sapphire/framework';
  * import { URL } from 'url';
  *
  * // Define a class extending `Argument`, then export it.
@@ -42,7 +42,7 @@ const BaseAliasPiece_1 = require("./base/BaseAliasPiece");
  * @example
  * ```javascript
  * // JavaScript:
- * const { Argument } = require('sapphire/framework');
+ * const { Argument } = require('(at)sapphire/framework');
  *
  * // Define a class extending `Argument`, then export it.
  * module.exports = class CoreArgument extends Argument {
@@ -60,7 +60,7 @@ const BaseAliasPiece_1 = require("./base/BaseAliasPiece");
  * }
  * ```
  */
-class Argument extends BaseAliasPiece_1.BaseAliasPiece {
+class Argument extends pieces_1.AliasPiece {
     /**
      * Wraps a value into a successful value.
      * @param value The value to wrap.

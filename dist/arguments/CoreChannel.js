@@ -7,7 +7,7 @@ class CoreArgument extends Argument_1.Argument {
         super(context, { name: 'channel' });
     }
     run(argument, context) {
-        const channel = (context.message.guild ? context.message.guild.channels : this.client.channels).cache.get(argument);
+        const channel = (context.message.guild ? context.message.guild.channels : this.context.client.channels).cache.get(argument);
         if (!channel) {
             return this.error(argument, 'ArgumentChannelMissingChannel', 'The argument did not resolve to a channel.');
         }
