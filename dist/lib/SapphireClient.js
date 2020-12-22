@@ -13,7 +13,6 @@ require("./types/Enums");
 const Events_1 = require("./types/Events");
 require("./utils/logger/ILogger");
 const Logger_1 = require("./utils/logger/Logger");
-const RootDir_1 = require("./utils/RootDir");
 /**
  * The base [[Client]] extension that makes Sapphire work. When building a Discord bot with the framework, the developer
  * must either use this class, or extend it.
@@ -116,7 +115,7 @@ class SapphireClient extends discord_js_1.Client {
      * to create new pieces and hot-load them later anytime.
      * @param rootDirectory The root directory to register pieces at.
      */
-    registerUserDirectories(rootDirectory = RootDir_1.getRootDirectory()) {
+    registerUserDirectories(rootDirectory = pieces_1.getRootData().root) {
         for (const store of this.stores) {
             store.registerPath(path_1.join(rootDirectory, store.name));
         }
