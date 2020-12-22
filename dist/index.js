@@ -10,10 +10,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MissingExportsError = exports.LoaderError = void 0;
+exports.Store = exports.Piece = exports.MissingExportsError = exports.LoaderError = exports.AliasStore = exports.AliasPiece = void 0;
 var pieces_1 = require("@sapphire/pieces");
+Object.defineProperty(exports, "AliasPiece", { enumerable: true, get: function () { return pieces_1.AliasPiece; } });
+Object.defineProperty(exports, "AliasStore", { enumerable: true, get: function () { return pieces_1.AliasStore; } });
 Object.defineProperty(exports, "LoaderError", { enumerable: true, get: function () { return pieces_1.LoaderError; } });
 Object.defineProperty(exports, "MissingExportsError", { enumerable: true, get: function () { return pieces_1.MissingExportsError; } });
+Object.defineProperty(exports, "Piece", { enumerable: true, get: function () { return pieces_1.Piece; } });
+Object.defineProperty(exports, "Store", { enumerable: true, get: function () { return pieces_1.Store; } });
 __exportStar(require("./lib/errors/ArgumentError"), exports);
 __exportStar(require("./lib/errors/UserError"), exports);
 __exportStar(require("./lib/extensions/SapphireMessage"), exports);

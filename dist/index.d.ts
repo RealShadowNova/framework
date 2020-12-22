@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
-export { Awaited, LoaderError, MissingExportsError, PieceContext } from '@sapphire/pieces';
+export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
 import { Message, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Client, MessageOptions as MessageOptions$1, MessageAdditions as MessageAdditions$1, SplitOptions as SplitOptions$1, ClientOptions, ClientEvents, PermissionResolvable } from 'discord.js';
 import { Ok as Ok$1, Err as Err$1, Args as Args$1, UnorderedStrategy } from 'lexure';
 import { URL } from 'url';
