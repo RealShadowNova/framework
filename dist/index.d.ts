@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
-import { Message, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Client, MessageOptions as MessageOptions$1, MessageAdditions as MessageAdditions$1, SplitOptions as SplitOptions$1, ClientOptions, ClientEvents, PermissionResolvable } from 'discord.js';
+import { Message, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Client, ClientOptions, ClientEvents, PermissionResolvable } from 'discord.js';
 import { Ok as Ok$1, Err as Err$1, Args as Args$1, UnorderedStrategy } from 'lexure';
 import { URL } from 'url';
 import { EventEmitter } from 'events';
@@ -695,24 +695,6 @@ declare class ArgumentError<T> extends UserError {
     constructor(argument: IArgument<T>, parameter: string, type: string, message: string);
 }
 
-declare const SapphireMessage_base: typeof Message;
-declare class SapphireMessage extends SapphireMessage_base {
-    fetchLanguage(): Awaited<string>;
-    fetchLanguageKey(key: string, ...values: readonly unknown[]): Promise<string>;
-    sendTranslated(key: string, values?: readonly unknown[], options?: MessageOptions$1 | (MessageOptions$1 & {
-        split?: false;
-    }) | MessageAdditions$1): Promise<Message>;
-    sendTranslated(key: string, values?: readonly unknown[], options?: MessageOptions$1 & {
-        split: true | SplitOptions$1;
-    }): Promise<Message[]>;
-    sendTranslated(key: string, options?: MessageOptions$1 | (MessageOptions$1 & {
-        split?: false;
-    }) | MessageAdditions$1): Promise<Message>;
-    sendTranslated(key: string, options?: MessageOptions$1 & {
-        split: true | SplitOptions$1;
-    }): Promise<Message[]>;
-}
-
 declare const enum CooldownLevel {
     Author = "author",
     Channel = "channel",
@@ -853,50 +835,6 @@ declare class PreconditionStore extends Store<Precondition> {
     constructor();
 }
 
-interface IInternationalization {
-    /**
-     * Resolves an i18n key from a message.
-     * @param message The message for context.
-     * @example
-     * ```typescript
-     * // Example usage:
-     * const name = await this.client.i18n.resolveNameFromMessage(message);
-     * const content = await this.client.i18n.resolveValue(name, 'prefix', { prefix });
-     * await message.channel.send(`The prefix is: ${content}`);
-     * ```
-     *
-     * @example
-     * ```typescript
-     * // Example implementation:
-     * return message.guild
-     *   ? (await database.get('guilds', message.guild.id))?.language
-     *   : 'en-US';
-     * ```
-     */
-    resolveNameFromMessage(message: Message): Awaited<string>;
-    /**
-     * Resolves an i18n value from the language name and the key.
-     * @param name The name of the language key, e.g. `'en-US'`.
-     * @param key The key to retrieve.
-     * @param values The i18n options.
-     * @example
-     * ```typescript
-     * // Example usage:
-     * const prefix = 's!';
-     * const content = await this.client.i18n.resolveValue('en-US', 'prefix', { prefix });
-     * // Returns "The prefix is `s!`."
-     * ```
-     *
-     * @example
-     * ```typescript
-     * // Example implementation (i18next):
-     * const t = languages.get(name);
-     * return t(key, ...values);
-     * ```
-     */
-    resolveValue(name: string, key: string, ...values: readonly unknown[]): Awaited<string>;
-}
-
 /**
  * The logger levels for the [[ILogger]].
  */
@@ -1007,13 +945,6 @@ interface SapphireClientOptions {
      */
     fetchPrefix?: SapphirePrefixHook;
     /**
-     * The internationalization options, defaults to an instance of [[Internationalization]] when
-     * [[ClientInternationalizationOptions.instance]] is not specified.
-     * @since 1.0.0
-     * @default { instance: new Internationalization('en-US') }
-     */
-    i18n?: ClientInternationalizationOptions;
-    /**
      * The client's ID, this is automatically set by the CoreReady event.
      * @since 1.0.0
      * @default this.client.user?.id ?? null
@@ -1112,11 +1043,6 @@ declare class SapphireClient extends Client {
      */
     logger: ILogger;
     /**
-     * The internationalization handler to be used by the framework and plugins.
-     * @since 1.0.0
-     */
-    i18n: IInternationalization;
-    /**
      * The arguments the framework has registered.
      * @since 1.0.0
      */
@@ -1185,15 +1111,10 @@ interface ClientLoggerOptions {
     level?: LogLevel;
     instance?: ILogger;
 }
-interface ClientInternationalizationOptions {
-    defaultName?: string;
-    instance?: IInternationalization;
-}
 declare module 'discord.js' {
     interface Client {
         id: string | null;
         logger: ILogger;
-        i18n: IInternationalization;
         arguments: ArgumentStore;
         commands: CommandStore;
         events: EventStore;
@@ -1201,22 +1122,6 @@ declare module 'discord.js' {
         fetchPrefix: SapphirePrefixHook;
     }
     interface ClientOptions extends SapphireClientOptions {
-    }
-    interface Message {
-        fetchLanguage(): Awaited<string>;
-        fetchLanguageKey(key: string, ...values: readonly unknown[]): Promise<string>;
-        sendTranslated(key: string, values?: readonly unknown[], options?: MessageOptions | (MessageOptions & {
-            split?: false;
-        }) | MessageAdditions): Promise<Message>;
-        sendTranslated(key: string, values?: readonly unknown[], options?: MessageOptions & {
-            split: true | SplitOptions;
-        }): Promise<Message[]>;
-        sendTranslated(key: string, options?: MessageOptions | (MessageOptions & {
-            split?: false;
-        }) | MessageAdditions): Promise<Message>;
-        sendTranslated(key: string, options?: MessageOptions & {
-            split: true | SplitOptions;
-        }): Promise<Message[]>;
     }
 }
 declare module '@sapphire/pieces' {
@@ -1431,13 +1336,6 @@ declare module 'discord.js' {
     }
 }
 
-declare class Internationalization implements IInternationalization {
-    defaultName: string;
-    constructor(defaultName: string);
-    resolveNameFromMessage(message: Message): Awaited<string>;
-    resolveValue(): Awaited<string>;
-}
-
 declare class Logger implements ILogger {
     level: LogLevel;
     constructor(level: LogLevel);
@@ -1482,4 +1380,4 @@ declare class PermissionsPrecondition implements PreconditionContainerSingleEntr
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionResult, BucketType, ClientInternationalizationOptions, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, IInternationalization, ILogger, IPieceError, IPreconditionContainer, Internationalization, LogLevel, LogMethods, Logger, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionContainerAll, PreconditionContainerAny, PreconditionContainerResolvable, PreconditionContainerSingle, PreconditionContainerSingleEntry, PreconditionContainerSingleResolvable, PreconditionContext, PreconditionResult, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphireMessage, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, SyncPluginHooks, UserError, err, isErr, isOk, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin };
+export { ArgOptions, ArgType, Args, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionContainer, LogLevel, LogMethods, Logger, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionContainerAll, PreconditionContainerAny, PreconditionContainerResolvable, PreconditionContainerSingle, PreconditionContainerSingleEntry, PreconditionContainerSingleResolvable, PreconditionContext, PreconditionResult, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, SyncPluginHooks, UserError, err, isErr, isOk, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin };

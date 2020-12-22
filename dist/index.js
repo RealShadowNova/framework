@@ -20,7 +20,6 @@ Object.defineProperty(exports, "Piece", { enumerable: true, get: function () { r
 Object.defineProperty(exports, "Store", { enumerable: true, get: function () { return pieces_1.Store; } });
 __exportStar(require("./lib/errors/ArgumentError"), exports);
 __exportStar(require("./lib/errors/UserError"), exports);
-__exportStar(require("./lib/extensions/SapphireMessage"), exports);
 __exportStar(require("./lib/plugins/Plugin"), exports);
 __exportStar(require("./lib/plugins/PluginManager"), exports);
 __exportStar(require("./lib/plugins/symbols"), exports);
@@ -37,8 +36,6 @@ __exportStar(require("./lib/structures/PreconditionStore"), exports);
 __exportStar(require("./lib/types/Enums"), exports);
 __exportStar(require("./lib/types/Events"), exports);
 __exportStar(require("./lib/utils/Args"), exports);
-__exportStar(require("./lib/utils/i18n/IInternationalization"), exports);
-__exportStar(require("./lib/utils/i18n/Internationalization"), exports);
 __exportStar(require("./lib/utils/logger/ILogger"), exports);
 __exportStar(require("./lib/utils/logger/Logger"), exports);
 __exportStar(require("./lib/utils/preconditions/containers/PermissionsPrecondition"), exports);
