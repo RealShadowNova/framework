@@ -1347,7 +1347,7 @@ declare class Logger implements ILogger {
     error(...values: readonly unknown[]): void;
     fatal(...values: readonly unknown[]): void;
     write(level: LogLevel, ...values: readonly unknown[]): void;
-    private static readonly levels;
+    protected static readonly levels: Map<LogLevel, LogMethods>;
 }
 declare type LogMethods = 'trace' | 'debug' | 'info' | 'warn' | 'error';
 
