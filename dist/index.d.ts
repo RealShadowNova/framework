@@ -85,7 +85,7 @@ declare class Args {
      */
     readonly message: Message;
     /**
-     * The command that is being running.
+     * The command that is being run.
      */
     readonly command: Command;
     private readonly parser;
@@ -371,6 +371,7 @@ interface ArgType {
     hyperlink: URL;
     integer: number;
     member: GuildMember;
+    message: Message;
     newsChannel: NewsChannel;
     number: number;
     role: Role;

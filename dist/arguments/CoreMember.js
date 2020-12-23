@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
+const discord_utilities_1 = require("@sapphire/discord-utilities");
 const Argument_1 = require("../lib/structures/Argument");
 class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'member' });
-        this.userOrMemberRegex = /^(?:<@!?)?(\d{17,19})>?$/;
     }
     async run(argument, context) {
         var _a;
@@ -17,7 +17,8 @@ class CoreArgument extends Argument_1.Argument {
         return member ? this.ok(member) : this.error(argument, 'ArgumentMemberUnknownMember', 'The argument did not resolve to a member.');
     }
     async resolveByID(argument, guild) {
-        const memberID = this.userOrMemberRegex.exec(argument);
+        var _a;
+        const memberID = (_a = discord_utilities_1.UserOrMemberMentionRegex.exec(argument)) !== null && _a !== void 0 ? _a : discord_utilities_1.SnowflakeRegex.exec(argument);
         return memberID ? guild.members.fetch(memberID[1]).catch(() => null) : null;
     }
     async resolveByQuery(argument, guild) {

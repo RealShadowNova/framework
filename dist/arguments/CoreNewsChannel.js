@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
+const discord_utilities_1 = require("@sapphire/discord-utilities");
 const ExtendedArgument_1 = require("../lib/structures/ExtendedArgument");
 class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     constructor(context) {
@@ -10,7 +11,7 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
         });
     }
     handle(channel, { argument }) {
-        return channel.type === 'news'
+        return discord_utilities_1.isNewsChannel(channel)
             ? this.ok(channel)
             : this.error(argument, 'ArgumentNewsChannelInvalidChannel', 'The argument did not resolve to a news channel.');
     }
