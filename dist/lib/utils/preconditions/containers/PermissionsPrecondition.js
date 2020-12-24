@@ -4,6 +4,7 @@ exports.PermissionsPrecondition = void 0;
 const discord_js_1 = require("discord.js");
 /**
  * Constructs a contextful permissions precondition requirement.
+ * @since 1.0.0
  * @example
  * ```typescript
  * export class CoreCommand extends Command {
@@ -28,7 +29,7 @@ class PermissionsPrecondition {
      * @param permissions The permissions that will be required by this command.
      */
     constructor(permissions) {
-        this.entry = 'Permissions';
+        this.name = 'Permissions';
         this.context = {
             permissions: new discord_js_1.Permissions(permissions)
         };

@@ -30,7 +30,7 @@ exports.Command = void 0;
 const pieces_1 = require("@sapphire/pieces");
 const Lexure = __importStar(require("lexure"));
 const Args_1 = require("../utils/Args");
-const PreconditionContainer_1 = require("../utils/preconditions/PreconditionContainer");
+const PreconditionContainerArray_1 = require("../utils/preconditions/PreconditionContainerArray");
 const FlagUnorderedStrategy_1 = require("../utils/strategies/FlagUnorderedStrategy");
 class Command extends pieces_1.AliasPiece {
     /**
@@ -39,7 +39,7 @@ class Command extends pieces_1.AliasPiece {
      * @param options Optional Command settings.
      */
     constructor(context, { name, ...options } = {}) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c;
         super(context, { ...options, name: (name !== null && name !== void 0 ? name : context.name).toLowerCase() });
         /**
          * The lexer to be used for command parsing
@@ -50,9 +50,9 @@ class Command extends pieces_1.AliasPiece {
         _lexer.set(this, new Lexure.Lexer());
         this.description = (_a = options.description) !== null && _a !== void 0 ? _a : '';
         this.detailedDescription = (_b = options.detailedDescription) !== null && _b !== void 0 ? _b : '';
-        this.preconditions = new PreconditionContainer_1.PreconditionContainerAll(this.context.client, (_c = options.preconditions) !== null && _c !== void 0 ? _c : []);
-        this.strategy = new FlagUnorderedStrategy_1.FlagUnorderedStrategy((_d = options.strategyOptions) !== null && _d !== void 0 ? _d : {});
-        __classPrivateFieldGet(this, _lexer).setQuotes((_e = options.quotes) !== null && _e !== void 0 ? _e : [
+        this.preconditions = new PreconditionContainerArray_1.PreconditionContainerArray(options.preconditions);
+        this.strategy = new FlagUnorderedStrategy_1.FlagUnorderedStrategy(options.strategyOptions);
+        __classPrivateFieldGet(this, _lexer).setQuotes((_c = options.quotes) !== null && _c !== void 0 ? _c : [
             ['"', '"'],
             ['“', '”'],
             ['「', '」'] // Corner brackets (CJK)
