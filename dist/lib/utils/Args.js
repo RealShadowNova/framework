@@ -101,6 +101,18 @@ class Args {
             return result.value;
         throw result.error;
     }
+    async peekResult(type, options = {}) {
+        this.save();
+        const result = typeof type === 'function' ? await type() : await this.pickResult(type, options);
+        this.restore();
+        return result;
+    }
+    async peek(type, options) {
+        const result = await this.peekResult(type, options);
+        if (Result_1.isOk(result))
+            return result.value;
+        throw result.error;
+    }
     /**
      * Checks if one or more flag were given.
      * @param keys The name(s) of the flag.
