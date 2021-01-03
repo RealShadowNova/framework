@@ -20,6 +20,7 @@ Object.defineProperty(exports, "Piece", { enumerable: true, get: function () { r
 Object.defineProperty(exports, "Store", { enumerable: true, get: function () { return pieces_1.Store; } });
 __exportStar(require("./lib/errors/ArgumentError"), exports);
 __exportStar(require("./lib/errors/UserError"), exports);
+__exportStar(require("./lib/errors/PreconditionError"), exports);
 __exportStar(require("./lib/plugins/Plugin"), exports);
 __exportStar(require("./lib/plugins/PluginManager"), exports);
 __exportStar(require("./lib/plugins/symbols"), exports);
