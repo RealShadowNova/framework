@@ -14,7 +14,7 @@ class CoreArgument extends Argument_1.Argument {
             return this.ok(true);
         if (falses.includes(boolean))
             return this.ok(false);
-        return this.error('ArgumentBooleanInvalidBoolean', 'The argument did not resolve to a boolean.');
+        return this.error(argument, 'ArgumentBooleanInvalidBoolean', 'The argument did not resolve to a boolean.');
     }
 }
 exports.CoreArgument = CoreArgument;
