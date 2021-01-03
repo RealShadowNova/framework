@@ -456,6 +456,10 @@ declare class Args {
      */
     restore(): void;
     /**
+     * Whether all arguments have been consumed.
+     */
+    get finished(): boolean;
+    /**
      * Resolves an argument.
      * @param arg The argument name or [[IArgument]] instance.
      */

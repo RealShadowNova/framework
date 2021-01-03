@@ -186,6 +186,12 @@ class Args {
             this.parser.restore(this.states.pop());
     }
     /**
+     * Whether all arguments have been consumed.
+     */
+    get finished() {
+        return this.parser.finished;
+    }
+    /**
      * Resolves an argument.
      * @param arg The argument name or [[IArgument]] instance.
      */
