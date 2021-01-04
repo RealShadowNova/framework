@@ -129,6 +129,15 @@ class SapphireClient extends discord_js_1.Client {
         return this;
     }
     /**
+     * Deregisters a store.
+     * @since 1.0.0
+     * @param store The store to deregister.
+     */
+    deregisterStore(store) {
+        this.stores.delete(store);
+        return this;
+    }
+    /**
      * Loads all pieces, then logs the client in, establishing a websocket connection to Discord.
      * @since 1.0.0
      * @param token Token of the account to log in with.

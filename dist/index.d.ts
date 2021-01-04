@@ -1438,6 +1438,12 @@ declare class SapphireClient extends Client {
      */
     registerStore<T extends Piece>(store: Store<T>): this;
     /**
+     * Deregisters a store.
+     * @since 1.0.0
+     * @param store The store to deregister.
+     */
+    deregisterStore<T extends Piece>(store: Store<T>): this;
+    /**
      * Loads all pieces, then logs the client in, establishing a websocket connection to Discord.
      * @since 1.0.0
      * @param token Token of the account to log in with.
