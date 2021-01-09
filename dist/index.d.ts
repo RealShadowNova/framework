@@ -2,7 +2,7 @@
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
 import { Message, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Collection, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
-import { Ok as Ok$1, Err as Err$1, Args as Args$1, UnorderedStrategy } from 'lexure';
+import { Ok as Ok$1, Err as Err$1, option, Args as Args$1, UnorderedStrategy } from 'lexure';
 import { URL } from 'url';
 import { EventEmitter } from 'events';
 
@@ -77,6 +77,78 @@ declare function isOk<T, E>(x: Result<T, E>): x is Ok<T>;
 declare function isErr<T, E>(x: Result<T, E>): x is Err<E>;
 
 /**
+ * A type used to express a value that may or may not exist.
+ * @typeparam T The value's type.
+ */
+declare type Maybe<T> = Some<T> | None;
+/**
+ * A value that exists.
+ * @typeparam T The value's type.
+ */
+declare type Some<T> = option.Some<T>;
+/**
+ * An empty value.
+ */
+declare type None = option.None;
+/**
+ * Returns the maybe itself.
+ * @param value The value to convert.
+ */
+declare function maybe<T, V extends Maybe<T>>(value: V): V;
+/**
+ * Creates a [[None]] from an existing [[None]] or a `null`.
+ * @param value The value to convert.
+ */
+declare function maybe(value: null | None): None;
+/**
+ * Creates a [[Some]] from a non-null value or an existing [[Some]], or a [[None]] otherwise.
+ * @param value The value to convert.
+ */
+declare function maybe<T>(value: T | Maybe<T> | null): Maybe<T>;
+/**
+ * Creates a [[Some]] from a non-null value or an existing [[Some]].
+ * @param value The value to convert.
+ */
+declare function maybe<T>(value: T | Some<T>): Some<T>;
+/**
+ * Creates a None with no value.
+ * @return An existing Maybe.
+ */
+declare function some(): Some<unknown>;
+/**
+ * Creates a None with a value.
+ * @typeparam T The value's type.
+ * @param x Value to use.
+ * @return An existing Maybe.
+ */
+declare function some<T>(x: T): Some<T>;
+/**
+ * Creates a None value.
+ * @return A non-existing Maybe.
+ */
+declare function none(): None;
+/**
+ * Determines whether or not a Maybe is a Some.
+ * @typeparam T The value's type.
+ */
+declare function isSome<T>(x: Maybe<T>): x is Some<T>;
+/**
+ * Determines whether or not a Maybe is a None.
+ * @typeparam T The value's type.
+ */
+declare function isNone<T>(x: Maybe<T>): x is None;
+/**
+ * Type-safe helper to preserve the type parameter's type.
+ * @param x The value to check.
+ */
+declare function isMaybe<T>(x: Maybe<T>): true;
+/**
+ * Determines whether or not an arbitrary value is a Maybe.
+ * @param x The value to check.
+ */
+declare function isMaybe<T>(x: unknown): x is Maybe<T>;
+
+/**
  * The argument parser to be used in [[Command]].
  */
 declare class Args {
@@ -89,7 +161,7 @@ declare class Args {
      */
     readonly command: Command;
     private readonly parser;
-    private states;
+    private readonly states;
     constructor(message: Message, command: Command, parser: Args$1);
     /**
      * Sets the parser to the first token.
@@ -395,10 +467,67 @@ declare class Args {
      */
     peek<K extends keyof ArgType>(type: (() => ArgumentResult<ArgType[K]>) | K, options?: ArgOptions): Promise<ArgType[K]>;
     /**
+     * Retrieves the next raw argument from the parser.
+     * @example
+     * ```typescript
+     * // !numbers 1 2 3
+     *
+     * console.log(args.nextMaybe());
+     * // -> { exists: true, value: '1' }
+     * ```
+     */
+    nextMaybe(): Maybe<string>;
+    /**
+     * Retrieves the value of the next unused ordered token, but only if it could be transformed.
+     * That token will now be consider used if the transformation succeeds.
+     * @typeparam T Output type of the [[ArgsNextCallback callback]].
+     * @param cb Gives an option of either the resulting value, or nothing if failed.
+     * @example
+     * ```typescript
+     * // !numbers 1 2 3
+     * const parse = (x: string) => {
+     *   const n = Number(x);
+     *   return Number.isNaN(n) ? none() : some(n);
+     * };
+     *
+     * console.log(args.nextMaybe(parse));
+     * // -> { exists: true, value: 1 }
+     * ```
+     */
+    nextMaybe<T>(cb: ArgsNextCallback<T>): Maybe<T>;
+    /**
+     * Similar to [[Args.nextMaybe]] but returns the value on success, null otherwise.
+     * @example
+     * ```typescript
+     * // !numbers 1 2 3
+     *
+     * console.log(args.next());
+     * // -> '1'
+     * ```
+     */
+    next(): string;
+    /**
+     * Similar to [[Args.nextMaybe]] but returns the value on success, null otherwise.
+     * @typeparam T Output type of the [[ArgsNextCallback callback]].
+     * @param cb Gives an option of either the resulting value, or nothing if failed.
+     * @example
+     * ```typescript
+     * // !numbers 1 2 3
+     * const parse = (x: string) => {
+     *   const n = Number(x);
+     *   return Number.isNaN(n) ? none() : some(n);
+     * };
+     *
+     * console.log(args.nextMaybe(parse));
+     * // -> 1
+     * ```
+     */
+    next<T>(cb: ArgsNextCallback<T>): T;
+    /**
      * Checks if one or more flag were given.
      * @param keys The name(s) of the flag.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--f --g'.
      * console.log(args.getFlags('f'));
      * >>> true
@@ -415,7 +544,7 @@ declare class Args {
      * Gets the last value of one or more options.
      * @param keys The name(s) of the option.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--a=1 --b=2 --c=3'.
      * console.log(args.getOption('a'));
      * >>> '1'
@@ -432,7 +561,7 @@ declare class Args {
      * Gets all the values of one or more option.
      * @param keys The name(s) of the option.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--a=1 --a=1 --b=2 --c=3'.
      * console.log(args.getOptions('a'));
      * >>> ['1', '1']
@@ -512,6 +641,15 @@ interface RepeatArgOptions extends ArgOptions {
      * @default Infinity
      */
     times?: number;
+}
+/**
+ * The callback used for [[Args.nextMaybe]] and [[Args.next]].
+ */
+interface ArgsNextCallback<T> {
+    /**
+     * The value to be mapped.
+     */
+    (value: string): Maybe<T>;
 }
 
 /**
@@ -1739,4 +1877,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionErrorExtras, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, SyncPluginHooks, UserError, err, isErr, isOk, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionErrorExtras, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };

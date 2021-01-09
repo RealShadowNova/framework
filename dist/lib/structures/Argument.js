@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Argument = void 0;
 const pieces_1 = require("@sapphire/pieces");
-const Args_1 = require("../utils/Args");
-const Result_1 = require("../utils/Result");
+const Args_1 = require("../parsers/Args");
+const Result_1 = require("../parsers/Result");
 /**
  * The base argument class. This class is abstract and is to be extended by subclasses implementing the methods. In
  * Sapphire's workflow, arguments are called when using [[Args]]'s methods (usually used inside [[Command]]s by default).

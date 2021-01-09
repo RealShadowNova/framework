@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PreconditionConditionOr = void 0;
-const Result_1 = require("../../Result");
+const Result_1 = require("../../../parsers/Result");
 /**
  * An [[IPreconditionCondition]] which runs all containers similarly to doing (V0 || V1 [|| V2 [|| V3 ...]]).
  * @since 1.0.0

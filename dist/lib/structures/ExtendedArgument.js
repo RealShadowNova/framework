@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExtendedArgument = void 0;
-const Result_1 = require("../utils/Result");
+const Result_1 = require("../parsers/Result");
 const Argument_1 = require("./Argument");
 /**
  * The extended argument class. This class is abstract and is to be extended by subclasses which

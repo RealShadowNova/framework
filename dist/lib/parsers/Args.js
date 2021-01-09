@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Args = void 0;
 const ArgumentError_1 = require("../errors/ArgumentError");
 const UserError_1 = require("../errors/UserError");
+const Maybe_1 = require("./Maybe");
 const Result_1 = require("./Result");
 /**
  * The argument parser to be used in [[Command]].
@@ -113,11 +114,18 @@ class Args {
             return result.value;
         throw result.error;
     }
+    nextMaybe(cb) {
+        return Maybe_1.maybe(typeof cb === 'function' ? this.parser.singleMap(cb) : this.parser.single());
+    }
+    next(cb) {
+        const value = cb ? this.nextMaybe(cb) : this.nextMaybe();
+        return Maybe_1.isSome(value) ? value.value : null;
+    }
     /**
      * Checks if one or more flag were given.
      * @param keys The name(s) of the flag.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--f --g'.
      * console.log(args.getFlags('f'));
      * >>> true
@@ -136,7 +144,7 @@ class Args {
      * Gets the last value of one or more options.
      * @param keys The name(s) of the option.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--a=1 --b=2 --c=3'.
      * console.log(args.getOption('a'));
      * >>> '1'
@@ -155,7 +163,7 @@ class Args {
      * Gets all the values of one or more option.
      * @param keys The name(s) of the option.
      * @example
-     * ```ts
+     * ```typescript
      * // Suppose args are from '--a=1 --a=1 --b=2 --c=3'.
      * console.log(args.getOptions('a'));
      * >>> ['1', '1']

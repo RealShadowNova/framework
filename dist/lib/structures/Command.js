@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Command = void 0;
 const pieces_1 = require("@sapphire/pieces");
 const Lexure = __importStar(require("lexure"));
-const Args_1 = require("../utils/Args");
+const Args_1 = require("../parsers/Args");
 const PreconditionContainerArray_1 = require("../utils/preconditions/PreconditionContainerArray");
 const FlagUnorderedStrategy_1 = require("../utils/strategies/FlagUnorderedStrategy");
 class Command extends pieces_1.AliasPiece {
