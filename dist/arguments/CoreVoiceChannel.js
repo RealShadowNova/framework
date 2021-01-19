@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
-const discord_utilities_1 = require("@sapphire/discord-utilities");
+const discord_js_utilities_1 = require("@sapphire/discord.js-utilities");
 const ExtendedArgument_1 = require("../lib/structures/ExtendedArgument");
 class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     constructor(context) {
@@ -11,7 +11,7 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
         });
     }
     handle(channel, { argument }) {
-        return discord_utilities_1.isVoiceChannel(channel)
+        return discord_js_utilities_1.isVoiceChannel(channel)
             ? this.ok(channel)
             : this.error(argument, 'ArgumentVoiceChannelInvalidChannel', 'The argument did not resolve to a voice channel.');
     }

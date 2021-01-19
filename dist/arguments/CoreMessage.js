@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
-const discord_utilities_1 = require("@sapphire/discord-utilities");
+const discord_js_utilities_1 = require("@sapphire/discord.js-utilities");
 const discord_js_1 = require("discord.js");
 const Argument_1 = require("../lib/structures/Argument");
 class CoreArgument extends Argument_1.Argument {
@@ -16,13 +16,13 @@ class CoreArgument extends Argument_1.Argument {
     async resolveByID(argument, context) {
         var _a;
         const channel = (_a = context.channel) !== null && _a !== void 0 ? _a : context.message.channel;
-        return discord_utilities_1.SnowflakeRegex.test(argument) ? channel.messages.fetch(argument).catch(() => null) : null;
+        return discord_js_utilities_1.SnowflakeRegex.test(argument) ? channel.messages.fetch(argument).catch(() => null) : null;
     }
     async resolveByLink(argument, { message }) {
         var _a;
         if (!message.guild)
             return null;
-        const matches = discord_utilities_1.MessageLinkRegex.exec(argument);
+        const matches = discord_js_utilities_1.MessageLinkRegex.exec(argument);
         if (!matches)
             return null;
         const [, guildID, channelID, messageID] = matches;
@@ -32,7 +32,7 @@ class CoreArgument extends Argument_1.Argument {
         const channel = guild.channels.cache.get(channelID);
         if (!channel)
             return null;
-        if (!(discord_utilities_1.isNewsChannel(channel) || discord_utilities_1.isTextChannel(channel)))
+        if (!(discord_js_utilities_1.isNewsChannel(channel) || discord_js_utilities_1.isTextChannel(channel)))
             return null;
         if (!channel.viewable)
             return null;
