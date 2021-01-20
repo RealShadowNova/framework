@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
-import { Message, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Collection, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
+import { Message, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Collection, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
 import { Ok as Ok$1, Err as Err$1, option, Args as Args$1, UnorderedStrategy } from 'lexure';
 import { URL } from 'url';
 import { EventEmitter } from 'events';
@@ -616,6 +616,7 @@ declare class Args {
 }
 interface ArgType {
     boolean: boolean;
+    categoryChannel: CategoryChannel;
     channel: Channel;
     date: Date;
     dmChannel: DMChannel;
