@@ -2,7 +2,7 @@
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
 import { Message, Collection, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
-import { Ok as Ok$1, Err as Err$1, UnorderedStrategy, option, Args as Args$1 } from 'lexure';
+import { Ok as Ok$1, Err as Err$1, UnorderedStrategy, Lexer, option, Args as Args$1 } from 'lexure';
 import { URL } from 'url';
 import { EventEmitter } from 'events';
 
@@ -383,7 +383,6 @@ interface FlagStrategyOptions {
 }
 
 declare abstract class Command<T = Args> extends AliasPiece {
-    #private;
     /**
      * A basic summary about the command
      * @since 1.0.0
@@ -404,6 +403,12 @@ declare abstract class Command<T = Args> extends AliasPiece {
      * @since 1.0.0
      */
     strategy: UnorderedStrategy;
+    /**
+     * The lexer to be used for command parsing
+     * @since 1.0.0
+     * @private
+     */
+    protected lexer: Lexer;
     /**
      * @since 1.0.0
      * @param context The context.

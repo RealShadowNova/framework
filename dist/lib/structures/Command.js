@@ -18,13 +18,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
-var _lexer;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Command = void 0;
 const pieces_1 = require("@sapphire/pieces");
@@ -46,13 +39,12 @@ class Command extends pieces_1.AliasPiece {
          * @since 1.0.0
          * @private
          */
-        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-        _lexer.set(this, new Lexure.Lexer());
+        this.lexer = new Lexure.Lexer();
         this.description = (_a = options.description) !== null && _a !== void 0 ? _a : '';
         this.detailedDescription = (_b = options.detailedDescription) !== null && _b !== void 0 ? _b : '';
         this.preconditions = new PreconditionContainerArray_1.PreconditionContainerArray(options.preconditions);
         this.strategy = new FlagUnorderedStrategy_1.FlagUnorderedStrategy(options.strategyOptions);
-        __classPrivateFieldGet(this, _lexer).setQuotes((_c = options.quotes) !== null && _c !== void 0 ? _c : [
+        this.lexer.setQuotes((_c = options.quotes) !== null && _c !== void 0 ? _c : [
             ['"', '"'],
             ['“', '”'],
             ['「', '」'] // Corner brackets (CJK)
@@ -64,7 +56,7 @@ class Command extends pieces_1.AliasPiece {
      * @param parameters The raw parameters as a single string.
      */
     preParse(message, parameters) {
-        const parser = new Lexure.Parser(__classPrivateFieldGet(this, _lexer).setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
+        const parser = new Lexure.Parser(this.lexer.setInput(parameters).lex()).setUnorderedStrategy(this.strategy);
         const args = new Lexure.Args(parser.parse());
         return new Args_1.Args(message, this, args);
     }
@@ -81,5 +73,4 @@ class Command extends pieces_1.AliasPiece {
     }
 }
 exports.Command = Command;
-_lexer = new WeakMap();
 //# sourceMappingURL=Command.js.map
