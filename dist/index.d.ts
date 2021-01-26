@@ -1435,6 +1435,12 @@ interface SapphireClientOptions {
      * @default { instance: new Logger(LogLevel.Info) }
      */
     logger?: ClientLoggerOptions;
+    /**
+     * If Sapphire should load our pre-included error event listeners that log any encountered errors to the [[SapphireClient.logger]] instance
+     * @since 1.0.0
+     * @default true
+     */
+    loadDefaultErrorEvents?: boolean;
 }
 /**
  * The base [[Client]] extension that makes Sapphire work. When building a Discord bot with the framework, the developer
@@ -1612,6 +1618,7 @@ declare module 'discord.js' {
 declare module '@sapphire/pieces' {
     interface PieceContextExtras {
         client: SapphireClient;
+        logger: ILogger;
     }
 }
 

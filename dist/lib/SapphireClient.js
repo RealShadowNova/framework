@@ -72,6 +72,7 @@ class SapphireClient extends discord_js_1.Client {
             this.emit(Events_1.Events.PluginLoaded, plugin.type, plugin.name);
         }
         this.logger = (_b = (_a = options.logger) === null || _a === void 0 ? void 0 : _a.instance) !== null && _b !== void 0 ? _b : new Logger_1.Logger((_d = (_c = options.logger) === null || _c === void 0 ? void 0 : _c.level) !== null && _d !== void 0 ? _d : 30 /* Info */);
+        pieces_1.Store.injectedContext.logger = this.logger;
         this.fetchPrefix = (_e = options.fetchPrefix) !== null && _e !== void 0 ? _e : (() => { var _a; return (_a = this.options.defaultPrefix) !== null && _a !== void 0 ? _a : null; });
         for (const plugin of SapphireClient.plugins.values("preInitialization" /* PreInitialization */)) {
             plugin.hook.call(this, options);
@@ -82,6 +83,8 @@ class SapphireClient extends discord_js_1.Client {
         this.commands = new CommandStore_1.CommandStore();
         this.events = new EventStore_1.EventStore().registerPath(path_1.join(__dirname, '..', 'events'));
         this.preconditions = new PreconditionStore_1.PreconditionStore().registerPath(path_1.join(__dirname, '..', 'preconditions'));
+        if (options.loadDefaultErrorEvents !== false)
+            this.events.registerPath(path_1.join(__dirname, '..', 'errorEvents'));
         this.stores = new Set();
         this.registerStore(this.arguments) //
             .registerStore(this.commands)
