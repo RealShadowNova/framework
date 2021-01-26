@@ -31,6 +31,7 @@ class Args {
         if (!argument)
             return Result_1.err(new UserError_1.UserError('UnavailableArgument', `The argument "${type}" was not found.`));
         const result = await this.parser.singleParseAsync(async (arg) => argument.run(arg, {
+            args: this,
             message: this.message,
             command: this.command,
             ...options
@@ -56,6 +57,7 @@ class Args {
         const state = this.parser.save();
         const data = this.parser.many().reduce((acc, token) => `${acc}${token.value}${token.trailing}`, '');
         const result = await argument.run(data, {
+            args: this,
             message: this.message,
             command: this.command,
             ...options
@@ -81,6 +83,7 @@ class Args {
         const output = [];
         for (let i = 0, times = (_a = options.times) !== null && _a !== void 0 ? _a : Infinity; i < times; i++) {
             const result = await this.parser.singleParseAsync(async (arg) => argument.run(arg, {
+                args: this,
                 message: this.message,
                 command: this.command,
                 ...options

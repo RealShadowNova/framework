@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { Awaited, Piece, AliasPiece, PieceContext, AliasPieceOptions, AliasStore, PieceOptions, Store } from '@sapphire/pieces';
 export { AliasPiece, AliasPieceOptions, AliasStore, Awaited, LoaderError, MissingExportsError, Piece, PieceContext, PieceOptions, Store, StoreOptions } from '@sapphire/pieces';
-import { Message, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, Collection, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
-import { Ok as Ok$1, Err as Err$1, option, Args as Args$1, UnorderedStrategy } from 'lexure';
+import { Message, Collection, CategoryChannel, Channel, DMChannel, GuildChannel, GuildMember, NewsChannel, Role, TextChannel, User, VoiceChannel, ClientOptions, ClientEvents, Client, PermissionResolvable } from 'discord.js';
+import { Ok as Ok$1, Err as Err$1, UnorderedStrategy, option, Args as Args$1 } from 'lexure';
 import { URL } from 'url';
 import { EventEmitter } from 'events';
 
@@ -75,6 +75,410 @@ declare function isOk<T, E>(x: Result<T, E>): x is Ok<T>;
  * @typeparam E The error's type.
  */
 declare function isErr<T, E>(x: Result<T, E>): x is Err<E>;
+
+/**
+ * Defines the result's value for a PreconditionContainer.
+ * @since 1.0.0
+ */
+declare type PreconditionContainerResult = Result<unknown, UserError>;
+/**
+ * Defines the return type of the generic [[IPreconditionContainer.run]].
+ * @since 1.0.0
+ */
+declare type PreconditionContainerReturn = Awaited<PreconditionContainerResult>;
+/**
+ * Async-only version of [[PreconditionContainerReturn]], to be used when the run method is async.
+ * @since 1.0.0
+ */
+declare type AsyncPreconditionContainerReturn = Promise<PreconditionContainerResult>;
+/**
+ * An abstracted precondition container to be implemented by classes.
+ * @since 1.0.0
+ */
+interface IPreconditionContainer {
+    /**
+     * Runs a precondition container.
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     */
+    run(message: Message, command: Command): PreconditionContainerReturn;
+}
+
+/**
+ * Defines the condition for [[PreconditionContainerArray]]s to run.
+ * @since 1.0.0
+ */
+interface IPreconditionCondition {
+    /**
+     * Runs the containers one by one.
+     * @seealso [[PreconditionRunMode.sequential]]
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     * @param entries The containers to run.
+     */
+    sequential(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
+    /**
+     * Runs all the containers using `Promise.all`, then checks the results once all tasks finished running.
+     * @seealso [[PreconditionRunMode.parallel]]
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     * @param entries The containers to run.
+     */
+    parallel(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
+}
+
+declare type PreconditionErrorExtras = object | null;
+/**
+ * Errors thrown by preconditions
+ * @property name This will be `'PreconditionError'` and can be used to distinguish the type of error when any error gets thrown
+ */
+declare class PreconditionError extends UserError {
+    readonly precondition: Precondition;
+    readonly extras: PreconditionErrorExtras;
+    constructor(argument: Precondition, type: string, message: string, extras?: PreconditionErrorExtras);
+}
+
+declare type PreconditionResult = Awaited<Result<unknown, UserError>>;
+declare type AsyncPreconditionResult = Promise<Result<unknown, UserError>>;
+declare abstract class Precondition extends Piece {
+    abstract run(message: Message, command: Command, context: PreconditionContext): PreconditionResult;
+    ok(): PreconditionResult;
+    /**
+     * Constructs an [[ArgumentError]] with [[ArgumentError#type]] set to the [[IArgument<T>#name]].
+     * @param message The description message for the rejection.
+     */
+    error(message: string, extras?: PreconditionErrorExtras): PreconditionResult;
+    /**
+     * Constructs an [[ArgumentError]] with a custom type.
+     * @param type The identifier for the error.
+     * @param message The description message for the rejection.
+     */
+    error(type: string, message: string, extras?: PreconditionErrorExtras): PreconditionResult;
+}
+interface PreconditionContext extends Record<PropertyKey, unknown> {
+}
+
+/**
+ * Defines the detailed options for the [[PreconditionContainerSingle]], where both the [[PreconditionContext]] and the
+ * name of the precondition can be defined.
+ * @since 1.0.0
+ */
+interface PreconditionSingleResolvableDetails {
+    /**
+     * The name of the precondition to retrieve from [[SapphireClient.preconditions]].
+     * @since 1.0.0
+     */
+    name: string;
+    /**
+     * The context to be set at [[PreconditionContainerSingle.context]].
+     * @since 1.0.0
+     */
+    context: PreconditionContext;
+}
+/**
+ * Defines the data accepted by [[PreconditionContainerSingle]]'s constructor.
+ * @since 1.0.0
+ */
+declare type PreconditionSingleResolvable = string | PreconditionSingleResolvableDetails;
+/**
+ * An [[IPreconditionContainer]] which runs a single precondition from [[SapphireClient.preconditions]].
+ * @since 1.0.0
+ */
+declare class PreconditionContainerSingle implements IPreconditionContainer {
+    /**
+     * The context to be used when calling [[Precondition.run]]. This will always be an empty object (`{}`) when the
+     * container was constructed with a string, otherwise it is a direct reference to the value from
+     * [[PreconditionSingleResolvableDetails.context]].
+     * @since 1.0.0
+     */
+    readonly context: PreconditionContext;
+    /**
+     * The name of the precondition to run.
+     * @since 1.0.0
+     */
+    readonly name: string;
+    constructor(data: PreconditionSingleResolvable);
+    /**
+     * Runs the container.
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     */
+    run(message: Message, command: Command): Awaited<Result<unknown, UserError>>;
+}
+
+/**
+ * The run mode for a [[PreconditionContainerArray]].
+ * @since 1.0.0
+ */
+declare const enum PreconditionRunMode {
+    /**
+     * The entries are run sequentially, this is the default behaviour and can be slow when doing long asynchronous
+     * tasks, but is performance savvy.
+     * @since 1.0.0
+     */
+    Sequential = 0,
+    /**
+     * All entries are run in parallel using `Promise.all`, then the results are processed after all of them have
+     * completed.
+     * @since 1.0.0
+     */
+    Parallel = 1
+}
+/**
+ * The condition for a [[PreconditionContainerArray]].
+ */
+declare enum PreconditionRunCondition {
+    /**
+     * Defines a condition where all the entries must pass. This uses [[PreconditionConditionAnd]].
+     * @since 1.0.0
+     */
+    And = 0,
+    /**
+     * Defines a condition where at least one entry must pass. This uses [[PreconditionConditionOr]].
+     * @since 1.0.0
+     */
+    Or = 1
+}
+/**
+ * Defines the detailed options for the [[PreconditionContainerArray]], where both the [[PreconditionRunMode]] and the
+ * entries can be defined.
+ * @since 1.0.0
+ */
+interface PreconditionArrayResolvableDetails {
+    /**
+     * The data that will be used to resolve [[IPreconditionContainer]] dependent of this one.
+     * @since 1.0.0
+     */
+    entries: readonly PreconditionEntryResolvable[];
+    /**
+     * The mode the [[PreconditionContainerArray]] will run.
+     * @since 1.0.0
+     */
+    mode: PreconditionRunMode;
+}
+/**
+ * Defines the data accepted by [[PreconditionContainerArray]]'s constructor.
+ * @since 1.0.0
+ */
+declare type PreconditionArrayResolvable = readonly PreconditionEntryResolvable[] | PreconditionArrayResolvableDetails;
+/**
+ * Defines the data accepted for each entry of the array.
+ * @since 1.0.0
+ * @seealso [[PreconditionArrayResolvable]]
+ * @seealso [[PreconditionArrayResolvableDetails.entries]]
+ */
+declare type PreconditionEntryResolvable = PreconditionSingleResolvable | PreconditionArrayResolvable;
+/**
+ * An [[IPreconditionContainer]] that defines an array of multiple [[IPreconditionContainer]]s.
+ *
+ * By default, array containers run either of two conditions: AND and OR ([[PreconditionRunCondition]]), the top level
+ * will always default to AND, where the nested one flips the logic (OR, then children arrays are AND, then OR...).
+ *
+ * This allows `['Connect', ['Moderator', ['DJ', 'SongAuthor']]]` to become a thrice-nested precondition container, where:
+ * - Level 1: [Single(Connect), Array] runs AND, both containers must return a successful value.
+ * - Level 2: [Single(Moderator), Array] runs OR, either container must return a successful value.
+ * - Level 3: [Single(DJ), Single(SongAuthor)] runs AND, both containers must return a successful value.
+ *
+ * In other words, it is identical to doing:
+ * ```typescript
+ * Connect && (Moderator || (DJ && SongAuthor));
+ * ```
+ * @remark More advanced logic can be accomplished by adding more [[IPreconditionCondition]]s (e.g. other operators),
+ * see [[PreconditionContainerArray.conditions]] for more information.
+ * @since 1.0.0
+ */
+declare class PreconditionContainerArray implements IPreconditionContainer {
+    /**
+     * The mode at which this precondition will run.
+     * @since 1.0.0
+     */
+    readonly mode: PreconditionRunMode;
+    /**
+     * The [[IPreconditionContainer]]s the array holds.
+     * @since 1.0.0
+     */
+    readonly entries: IPreconditionContainer[];
+    /**
+     * The [[PreconditionRunCondition]] that defines how entries must be handled.
+     * @since 1.0.0
+     */
+    readonly runCondition: PreconditionRunCondition;
+    constructor(data?: PreconditionArrayResolvable, parent?: PreconditionContainerArray | null);
+    /**
+     * Adds a new entry to the array.
+     * @since 1.0.0
+     * @param entry The value to add to the entries.
+     */
+    add(entry: IPreconditionContainer): this;
+    /**
+     * Runs the container.
+     * @since 1.0.0
+     * @param message The message that ran this precondition.
+     * @param command The command the message invoked.
+     */
+    run(message: Message, command: Command): PreconditionContainerReturn;
+    /**
+     * Parses the precondition entry resolvables, and adds them to the entries.
+     * @since 1.0.0
+     * @param entries The entries to parse.
+     */
+    protected parse(entries: Iterable<PreconditionEntryResolvable>): this;
+    /**
+     * Retrieves a condition from [[PreconditionContainerArray.conditions]], assuming existence.
+     * @since 1.0.0
+     */
+    protected get condition(): IPreconditionCondition;
+    /**
+     * The preconditions to be run. Extra ones can be added by augmenting [[PreconditionRunCondition]] and then
+     * inserting [[IPreconditionCondition]]s.
+     * @since 1.0.0
+     * @example
+     * ```typescript
+     * // Adding more kinds of conditions
+     *
+     * // Set the new condition:
+     * PreconditionContainerArray.conditions.set(2, PreconditionConditionRandom);
+     *
+     * // Augment Sapphire to add the new condition, in case of a JavaScript
+     * // project, this can be moved to an `Augments.d.ts` (or any other name)
+     * // file somewhere:
+     * declare module '(at)sapphire/framework' {
+     *   export enum PreconditionRunCondition {
+     *     Random = 2
+     *   }
+     * }
+     * ```
+     */
+    protected static readonly conditions: Collection<PreconditionRunCondition, IPreconditionCondition>;
+}
+
+/**
+ * The strategy options used in Sapphire.
+ */
+interface FlagStrategyOptions {
+    /**
+     * The accepted flags. Flags are key-only identifiers that can be placed anywhere in the command.
+     * @default []
+     */
+    flags?: readonly string[];
+    /**
+     * The accepted options. Options are key-value identifiers that can be placed anywhere in the command.
+     * @default []
+     */
+    options?: readonly string[];
+    /**
+     * The prefixes for both flags and options.
+     * @default ['--', '-', '—']
+     */
+    prefixes?: string[];
+    /**
+     * The flag separators.
+     * @default ['=', ':']
+     */
+    separators?: string[];
+}
+
+declare abstract class Command<T = Args> extends AliasPiece {
+    #private;
+    /**
+     * A basic summary about the command
+     * @since 1.0.0
+     */
+    description: string;
+    /**
+     * The preconditions to be run.
+     * @since 1.0.0
+     */
+    preconditions: IPreconditionContainer;
+    /**
+     * Longer version of command's summary and how to use it
+     * @since 1.0.0
+     */
+    detailedDescription: string;
+    /**
+     * The strategy to use for the lexer.
+     * @since 1.0.0
+     */
+    strategy: UnorderedStrategy;
+    /**
+     * @since 1.0.0
+     * @param context The context.
+     * @param options Optional Command settings.
+     */
+    protected constructor(context: PieceContext, { name, ...options }?: CommandOptions);
+    /**
+     * The pre-parse method. This method can be overriden by plugins to define their own argument parser.
+     * @param message The message that triggered the command.
+     * @param parameters The raw parameters as a single string.
+     */
+    preParse(message: Message, parameters: string): Awaited<T>;
+    /**
+     * Executes the command's logic.
+     * @param message The message that triggered the command.
+     * @param args The value returned by [[Command.preParse]], by default an instance of [[Args]].
+     */
+    abstract run(message: Message, args: T, context: CommandContext): Awaited<unknown>;
+    /**
+     * Defines the JSON.stringify behavior of the command.
+     */
+    toJSON(): Record<string, any>;
+}
+/**
+ * The [[Command]] options.
+ * @since 1.0.0
+ */
+interface CommandOptions extends AliasPieceOptions {
+    /**
+     * The description for the command.
+     * @since 1.0.0
+     * @default ''
+     */
+    description?: string;
+    /**
+     * The detailed description for the command.
+     * @since 1.0.0
+     * @default ''
+     */
+    detailedDescription?: string;
+    /**
+     * The [[Precondition]]s to be run, accepts an array of their names.
+     * @seealso [[PreconditionContainerArray]]
+     * @since 1.0.0
+     * @default []
+     */
+    preconditions?: PreconditionArrayResolvable;
+    /**
+     * The options for the lexer strategy.
+     * @since 1.0.0
+     * @default {}
+     */
+    strategyOptions?: FlagStrategyOptions;
+    /**
+     * The quotes accepted by this command, pass `[]` to disable them.
+     * @since 1.0.0
+     * @default
+     * [
+     *   ['"', '"'], // Double quotes
+     *   ['“', '”'], // Fancy quotes (on iOS)
+     *   ['「', '」'] // Corner brackets (CJK)
+     * ]
+     */
+    quotes?: [string, string][];
+}
+interface CommandContext extends Record<PropertyKey, unknown> {
+    /**
+     * The prefix used to run this command
+     */
+    prefix: string;
+    /**
+     * The alias used to run this command
+     */
+    commandName: string;
+}
 
 /**
  * A type used to express a value that may or may not exist.
@@ -654,410 +1058,6 @@ interface ArgsNextCallback<T> {
 }
 
 /**
- * Defines the result's value for a PreconditionContainer.
- * @since 1.0.0
- */
-declare type PreconditionContainerResult = Result<unknown, UserError>;
-/**
- * Defines the return type of the generic [[IPreconditionContainer.run]].
- * @since 1.0.0
- */
-declare type PreconditionContainerReturn = Awaited<PreconditionContainerResult>;
-/**
- * Async-only version of [[PreconditionContainerReturn]], to be used when the run method is async.
- * @since 1.0.0
- */
-declare type AsyncPreconditionContainerReturn = Promise<PreconditionContainerResult>;
-/**
- * An abstracted precondition container to be implemented by classes.
- * @since 1.0.0
- */
-interface IPreconditionContainer {
-    /**
-     * Runs a precondition container.
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     */
-    run(message: Message, command: Command): PreconditionContainerReturn;
-}
-
-/**
- * Defines the condition for [[PreconditionContainerArray]]s to run.
- * @since 1.0.0
- */
-interface IPreconditionCondition {
-    /**
-     * Runs the containers one by one.
-     * @seealso [[PreconditionRunMode.sequential]]
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     * @param entries The containers to run.
-     */
-    sequential(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
-    /**
-     * Runs all the containers using `Promise.all`, then checks the results once all tasks finished running.
-     * @seealso [[PreconditionRunMode.parallel]]
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     * @param entries The containers to run.
-     */
-    parallel(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
-}
-
-declare type PreconditionErrorExtras = object | null;
-/**
- * Errors thrown by preconditions
- * @property name This will be `'PreconditionError'` and can be used to distinguish the type of error when any error gets thrown
- */
-declare class PreconditionError extends UserError {
-    readonly precondition: Precondition;
-    readonly extras: PreconditionErrorExtras;
-    constructor(argument: Precondition, type: string, message: string, extras?: PreconditionErrorExtras);
-}
-
-declare type PreconditionResult = Awaited<Result<unknown, UserError>>;
-declare type AsyncPreconditionResult = Promise<Result<unknown, UserError>>;
-declare abstract class Precondition extends Piece {
-    abstract run(message: Message, command: Command, context: PreconditionContext): PreconditionResult;
-    ok(): PreconditionResult;
-    /**
-     * Constructs an [[ArgumentError]] with [[ArgumentError#type]] set to the [[IArgument<T>#name]].
-     * @param message The description message for the rejection.
-     */
-    error(message: string, extras?: PreconditionErrorExtras): PreconditionResult;
-    /**
-     * Constructs an [[ArgumentError]] with a custom type.
-     * @param type The identifier for the error.
-     * @param message The description message for the rejection.
-     */
-    error(type: string, message: string, extras?: PreconditionErrorExtras): PreconditionResult;
-}
-interface PreconditionContext extends Record<PropertyKey, unknown> {
-}
-
-/**
- * Defines the detailed options for the [[PreconditionContainerSingle]], where both the [[PreconditionContext]] and the
- * name of the precondition can be defined.
- * @since 1.0.0
- */
-interface PreconditionSingleResolvableDetails {
-    /**
-     * The name of the precondition to retrieve from [[SapphireClient.preconditions]].
-     * @since 1.0.0
-     */
-    name: string;
-    /**
-     * The context to be set at [[PreconditionContainerSingle.context]].
-     * @since 1.0.0
-     */
-    context: PreconditionContext;
-}
-/**
- * Defines the data accepted by [[PreconditionContainerSingle]]'s constructor.
- * @since 1.0.0
- */
-declare type PreconditionSingleResolvable = string | PreconditionSingleResolvableDetails;
-/**
- * An [[IPreconditionContainer]] which runs a single precondition from [[SapphireClient.preconditions]].
- * @since 1.0.0
- */
-declare class PreconditionContainerSingle implements IPreconditionContainer {
-    /**
-     * The context to be used when calling [[Precondition.run]]. This will always be an empty object (`{}`) when the
-     * container was constructed with a string, otherwise it is a direct reference to the value from
-     * [[PreconditionSingleResolvableDetails.context]].
-     * @since 1.0.0
-     */
-    readonly context: PreconditionContext;
-    /**
-     * The name of the precondition to run.
-     * @since 1.0.0
-     */
-    readonly name: string;
-    constructor(data: PreconditionSingleResolvable);
-    /**
-     * Runs the container.
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     */
-    run(message: Message, command: Command): Awaited<Result<unknown, UserError>>;
-}
-
-/**
- * The run mode for a [[PreconditionContainerArray]].
- * @since 1.0.0
- */
-declare const enum PreconditionRunMode {
-    /**
-     * The entries are run sequentially, this is the default behaviour and can be slow when doing long asynchronous
-     * tasks, but is performance savvy.
-     * @since 1.0.0
-     */
-    Sequential = 0,
-    /**
-     * All entries are run in parallel using `Promise.all`, then the results are processed after all of them have
-     * completed.
-     * @since 1.0.0
-     */
-    Parallel = 1
-}
-/**
- * The condition for a [[PreconditionContainerArray]].
- */
-declare enum PreconditionRunCondition {
-    /**
-     * Defines a condition where all the entries must pass. This uses [[PreconditionConditionAnd]].
-     * @since 1.0.0
-     */
-    And = 0,
-    /**
-     * Defines a condition where at least one entry must pass. This uses [[PreconditionConditionOr]].
-     * @since 1.0.0
-     */
-    Or = 1
-}
-/**
- * Defines the detailed options for the [[PreconditionContainerArray]], where both the [[PreconditionRunMode]] and the
- * entries can be defined.
- * @since 1.0.0
- */
-interface PreconditionArrayResolvableDetails {
-    /**
-     * The data that will be used to resolve [[IPreconditionContainer]] dependent of this one.
-     * @since 1.0.0
-     */
-    entries: readonly PreconditionEntryResolvable[];
-    /**
-     * The mode the [[PreconditionContainerArray]] will run.
-     * @since 1.0.0
-     */
-    mode: PreconditionRunMode;
-}
-/**
- * Defines the data accepted by [[PreconditionContainerArray]]'s constructor.
- * @since 1.0.0
- */
-declare type PreconditionArrayResolvable = readonly PreconditionEntryResolvable[] | PreconditionArrayResolvableDetails;
-/**
- * Defines the data accepted for each entry of the array.
- * @since 1.0.0
- * @seealso [[PreconditionArrayResolvable]]
- * @seealso [[PreconditionArrayResolvableDetails.entries]]
- */
-declare type PreconditionEntryResolvable = PreconditionSingleResolvable | PreconditionArrayResolvable;
-/**
- * An [[IPreconditionContainer]] that defines an array of multiple [[IPreconditionContainer]]s.
- *
- * By default, array containers run either of two conditions: AND and OR ([[PreconditionRunCondition]]), the top level
- * will always default to AND, where the nested one flips the logic (OR, then children arrays are AND, then OR...).
- *
- * This allows `['Connect', ['Moderator', ['DJ', 'SongAuthor']]]` to become a thrice-nested precondition container, where:
- * - Level 1: [Single(Connect), Array] runs AND, both containers must return a successful value.
- * - Level 2: [Single(Moderator), Array] runs OR, either container must return a successful value.
- * - Level 3: [Single(DJ), Single(SongAuthor)] runs AND, both containers must return a successful value.
- *
- * In other words, it is identical to doing:
- * ```typescript
- * Connect && (Moderator || (DJ && SongAuthor));
- * ```
- * @remark More advanced logic can be accomplished by adding more [[IPreconditionCondition]]s (e.g. other operators),
- * see [[PreconditionContainerArray.conditions]] for more information.
- * @since 1.0.0
- */
-declare class PreconditionContainerArray implements IPreconditionContainer {
-    /**
-     * The mode at which this precondition will run.
-     * @since 1.0.0
-     */
-    readonly mode: PreconditionRunMode;
-    /**
-     * The [[IPreconditionContainer]]s the array holds.
-     * @since 1.0.0
-     */
-    readonly entries: IPreconditionContainer[];
-    /**
-     * The [[PreconditionRunCondition]] that defines how entries must be handled.
-     * @since 1.0.0
-     */
-    readonly runCondition: PreconditionRunCondition;
-    constructor(data?: PreconditionArrayResolvable, parent?: PreconditionContainerArray | null);
-    /**
-     * Adds a new entry to the array.
-     * @since 1.0.0
-     * @param entry The value to add to the entries.
-     */
-    add(entry: IPreconditionContainer): this;
-    /**
-     * Runs the container.
-     * @since 1.0.0
-     * @param message The message that ran this precondition.
-     * @param command The command the message invoked.
-     */
-    run(message: Message, command: Command): PreconditionContainerReturn;
-    /**
-     * Parses the precondition entry resolvables, and adds them to the entries.
-     * @since 1.0.0
-     * @param entries The entries to parse.
-     */
-    protected parse(entries: Iterable<PreconditionEntryResolvable>): this;
-    /**
-     * Retrieves a condition from [[PreconditionContainerArray.conditions]], assuming existence.
-     * @since 1.0.0
-     */
-    protected get condition(): IPreconditionCondition;
-    /**
-     * The preconditions to be run. Extra ones can be added by augmenting [[PreconditionRunCondition]] and then
-     * inserting [[IPreconditionCondition]]s.
-     * @since 1.0.0
-     * @example
-     * ```typescript
-     * // Adding more kinds of conditions
-     *
-     * // Set the new condition:
-     * PreconditionContainerArray.conditions.set(2, PreconditionConditionRandom);
-     *
-     * // Augment Sapphire to add the new condition, in case of a JavaScript
-     * // project, this can be moved to an `Augments.d.ts` (or any other name)
-     * // file somewhere:
-     * declare module '(at)sapphire/framework' {
-     *   export enum PreconditionRunCondition {
-     *     Random = 2
-     *   }
-     * }
-     * ```
-     */
-    protected static readonly conditions: Collection<PreconditionRunCondition, IPreconditionCondition>;
-}
-
-/**
- * The strategy options used in Sapphire.
- */
-interface FlagStrategyOptions {
-    /**
-     * The accepted flags. Flags are key-only identifiers that can be placed anywhere in the command.
-     * @default []
-     */
-    flags?: readonly string[];
-    /**
-     * The accepted options. Options are key-value identifiers that can be placed anywhere in the command.
-     * @default []
-     */
-    options?: readonly string[];
-    /**
-     * The prefixes for both flags and options.
-     * @default ['--', '-', '—']
-     */
-    prefixes?: string[];
-    /**
-     * The flag separators.
-     * @default ['=', ':']
-     */
-    separators?: string[];
-}
-
-declare abstract class Command<T = Args> extends AliasPiece {
-    #private;
-    /**
-     * A basic summary about the command
-     * @since 1.0.0
-     */
-    description: string;
-    /**
-     * The preconditions to be run.
-     * @since 1.0.0
-     */
-    preconditions: IPreconditionContainer;
-    /**
-     * Longer version of command's summary and how to use it
-     * @since 1.0.0
-     */
-    detailedDescription: string;
-    /**
-     * The strategy to use for the lexer.
-     * @since 1.0.0
-     */
-    strategy: UnorderedStrategy;
-    /**
-     * @since 1.0.0
-     * @param context The context.
-     * @param options Optional Command settings.
-     */
-    protected constructor(context: PieceContext, { name, ...options }?: CommandOptions);
-    /**
-     * The pre-parse method. This method can be overriden by plugins to define their own argument parser.
-     * @param message The message that triggered the command.
-     * @param parameters The raw parameters as a single string.
-     */
-    preParse(message: Message, parameters: string): Awaited<T>;
-    /**
-     * Executes the command's logic.
-     * @param message The message that triggered the command.
-     * @param args The value returned by [[Command.preParse]], by default an instance of [[Args]].
-     */
-    abstract run(message: Message, args: T, context: CommandContext): Awaited<unknown>;
-    /**
-     * Defines the JSON.stringify behavior of the command.
-     */
-    toJSON(): Record<string, any>;
-}
-/**
- * The [[Command]] options.
- * @since 1.0.0
- */
-interface CommandOptions extends AliasPieceOptions {
-    /**
-     * The description for the command.
-     * @since 1.0.0
-     * @default ''
-     */
-    description?: string;
-    /**
-     * The detailed description for the command.
-     * @since 1.0.0
-     * @default ''
-     */
-    detailedDescription?: string;
-    /**
-     * The [[Precondition]]s to be run, accepts an array of their names.
-     * @seealso [[PreconditionContainerArray]]
-     * @since 1.0.0
-     * @default []
-     */
-    preconditions?: PreconditionArrayResolvable;
-    /**
-     * The options for the lexer strategy.
-     * @since 1.0.0
-     * @default {}
-     */
-    strategyOptions?: FlagStrategyOptions;
-    /**
-     * The quotes accepted by this command, pass `[]` to disable them.
-     * @since 1.0.0
-     * @default
-     * [
-     *   ['"', '"'], // Double quotes
-     *   ['“', '”'], // Fancy quotes (on iOS)
-     *   ['「', '」'] // Corner brackets (CJK)
-     * ]
-     */
-    quotes?: [string, string][];
-}
-interface CommandContext extends Record<PropertyKey, unknown> {
-    /**
-     * The prefix used to run this command
-     */
-    prefix: string;
-    /**
-     * The alias used to run this command
-     */
-    commandName: string;
-}
-
-/**
  * Defines a synchronous result of an [[Argument]], check [[AsyncArgumentResult]] for the asynchronous version.
  */
 declare type ArgumentResult<T> = Awaited<Result<T, UserError>>;
@@ -1157,6 +1157,7 @@ declare abstract class Argument<T = unknown> extends AliasPiece implements IArgu
 interface ArgumentOptions extends AliasPieceOptions {
 }
 interface ArgumentContext extends Record<PropertyKey, unknown> {
+    args: Args;
     message: Message;
     command: Command;
     minimum?: number;
