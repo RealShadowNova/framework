@@ -16,11 +16,40 @@ declare class UserError extends Error {
      */
     readonly identifier: string;
     /**
+     * User-provided context.
+     */
+    readonly context: unknown;
+    /**
      * Constructs an UserError.
      * @param type The identifier, useful to localize emitted errors.
      * @param message The error message.
      */
-    constructor(type: string, message: string);
+    constructor(options: UserError.Options);
+    get name(): string;
+}
+declare namespace UserError {
+    /**
+     * The options for [[UserError]].
+     * @since 1.0.0
+     */
+    interface Options {
+        /**
+         * The identifier for this error.
+         * @since 1.0.0
+         */
+        identifier: string;
+        /**
+         * The message to be passed to the Error constructor.
+         * @since 1.0.0
+         */
+        message?: string;
+        /**
+         * The extra context to provide more information about this error.
+         * @since 1.0.0
+         * @default null
+         */
+        context?: unknown;
+    }
 }
 
 /**
@@ -130,15 +159,33 @@ interface IPreconditionCondition {
     parallel(message: Message, command: Command, entries: readonly IPreconditionContainer[]): PreconditionContainerReturn;
 }
 
-declare type PreconditionErrorExtras = object | null;
 /**
  * Errors thrown by preconditions
  * @property name This will be `'PreconditionError'` and can be used to distinguish the type of error when any error gets thrown
  */
 declare class PreconditionError extends UserError {
     readonly precondition: Precondition;
-    readonly extras: PreconditionErrorExtras;
-    constructor(argument: Precondition, type: string, message: string, extras?: PreconditionErrorExtras);
+    constructor(options: PreconditionError.Options);
+    get name(): string;
+}
+declare namespace PreconditionError {
+    /**
+     * The options for [[PreconditionError]].
+     * @since 1.0.0
+     */
+    interface Options extends Omit<UserError.Options, 'identifier'> {
+        /**
+         * The precondition that caused the error.
+         * @since 1.0.0
+         */
+        precondition: Precondition;
+        /**
+         * The identifier.
+         * @since 1.0.0
+         * @default precondition.name
+         */
+        identifier?: string;
+    }
 }
 
 declare type PreconditionResult = Awaited<Result<unknown, UserError>>;
@@ -147,16 +194,10 @@ declare abstract class Precondition extends Piece {
     abstract run(message: Message, command: Command, context: PreconditionContext): PreconditionResult;
     ok(): PreconditionResult;
     /**
-     * Constructs an [[ArgumentError]] with [[ArgumentError#type]] set to the [[IArgument<T>#name]].
-     * @param message The description message for the rejection.
+     * Constructs a [[PreconditionError]] with the precondition parameter set to `this`.
+     * @param options The information.
      */
-    error(message: string, extras?: PreconditionErrorExtras): PreconditionResult;
-    /**
-     * Constructs an [[ArgumentError]] with a custom type.
-     * @param type The identifier for the error.
-     * @param message The description message for the rejection.
-     */
-    error(type: string, message: string, extras?: PreconditionErrorExtras): PreconditionResult;
+    error(options: Omit<PreconditionError.Options, 'precondition'>): PreconditionResult;
 }
 interface PreconditionContext extends Record<PropertyKey, unknown> {
 }
@@ -997,6 +1038,8 @@ declare class Args {
      * Whether all arguments have been consumed.
      */
     get finished(): boolean;
+    protected unavailableArgument<T>(type: string | IArgument<T>): Err<UserError>;
+    protected missingArguments(): Err<UserError>;
     /**
      * Resolves an argument.
      * @param arg The argument name or [[IArgument]] instance.
@@ -1008,20 +1051,13 @@ declare class Args {
      */
     static make<T>(cb: IArgument<T>['run'], name?: string): IArgument<T>;
     /**
-     * Constructs an [[ArgumentError]] with [[ArgumentError#type]] set to the [[IArgument<T>#name]].
-     * @param argument The argument that caused the rejection.
-     * @param parameter The parameter that triggered the argument.
-     * @param message The description message for the rejection.
-     */
-    static error<T>(argument: IArgument<T>, parameter: string, message: string): ArgumentError<T>;
-    /**
      * Constructs an [[ArgumentError]] with a custom type.
      * @param argument The argument that caused the rejection.
      * @param parameter The parameter that triggered the argument.
      * @param type The identifier for the error.
      * @param message The description message for the rejection.
      */
-    static error<T>(argument: IArgument<T>, parameter: string, type: string, message: string): ArgumentError<T>;
+    static error<T>(options: ArgumentError.Options<T>): ArgumentError<T>;
 }
 interface ArgType {
     boolean: boolean;
@@ -1080,7 +1116,7 @@ interface IArgument<T> {
      * @param argument The argument to parse.
      * @param context The context for the method call, contains the message, command, and other options.
      */
-    run(argument: string, context: ArgumentContext): ArgumentResult<T>;
+    run(argument: string, context: ArgumentContext<T>): ArgumentResult<T>;
 }
 /**
  * The base argument class. This class is abstract and is to be extended by subclasses implementing the methods. In
@@ -1139,29 +1175,24 @@ interface IArgument<T> {
  * ```
  */
 declare abstract class Argument<T = unknown> extends AliasPiece implements IArgument<T> {
-    abstract run(argument: string, context: ArgumentContext): ArgumentResult<T>;
+    abstract run(parameter: string, context: ArgumentContext<T>): ArgumentResult<T>;
     /**
      * Wraps a value into a successful value.
      * @param value The value to wrap.
      */
     ok(value: T): ArgumentResult<T>;
     /**
-     * Constructs an [[ArgumentError]] with [[ArgumentError#type]] set to the [[IArgument<T>#name]].
-     * @param parameter The parameter that triggered the argument.
-     * @param message The description message for the rejection.
-     */
-    error(parameter: string, message: string): ArgumentResult<T>;
-    /**
      * Constructs an [[ArgumentError]] with a custom type.
      * @param parameter The parameter that triggered the argument.
      * @param type The identifier for the error.
      * @param message The description message for the rejection.
      */
-    error(parameter: string, type: string, message: string): ArgumentResult<T>;
+    error(options: Omit<ArgumentError.Options<T>, 'argument'>): ArgumentResult<T>;
 }
 interface ArgumentOptions extends AliasPieceOptions {
 }
-interface ArgumentContext extends Record<PropertyKey, unknown> {
+interface ArgumentContext<T = unknown> extends Record<PropertyKey, unknown> {
+    argument: IArgument<T>;
     args: Args;
     message: Message;
     command: Command;
@@ -1172,12 +1203,38 @@ interface ArgumentContext extends Record<PropertyKey, unknown> {
 
 /**
  * Errors thrown by the argument parser
+ * @since 1.0.0
  * @property name This will be `'ArgumentError'` and can be used to distinguish the type of error when any error gets thrown
  */
 declare class ArgumentError<T> extends UserError {
     readonly argument: IArgument<T>;
     readonly parameter: string;
-    constructor(argument: IArgument<T>, parameter: string, type: string, message: string);
+    constructor(options: ArgumentError.Options<T>);
+    get name(): string;
+}
+declare namespace ArgumentError {
+    /**
+     * The options for [[ArgumentError]].
+     * @since 1.0.0
+     */
+    interface Options<T> extends Omit<UserError.Options, 'identifier'> {
+        /**
+         * The argument that caused the error.
+         * @since 1.0.0
+         */
+        argument: IArgument<T>;
+        /**
+         * The parameter that failed to be parsed.
+         * @since 1.0.0
+         */
+        parameter: string;
+        /**
+         * The identifier.
+         * @since 1.0.0
+         * @default argument.name
+         */
+        identifier?: string;
+    }
 }
 
 declare const enum CooldownLevel {
@@ -1696,7 +1753,7 @@ declare abstract class ExtendedArgument<K extends keyof ArgType, T> extends Argu
      * into the value used to compute the extended argument's value.
      */
     get base(): IArgument<ArgType[K]>;
-    run(argument: string, context: ArgumentContext): AsyncArgumentResult<T>;
+    run(parameter: string, context: ArgumentContext<T>): AsyncArgumentResult<T>;
     abstract handle(parsed: ArgType[K], context: ExtendedArgumentContext): ArgumentResult<T>;
 }
 interface ExtendedArgumentOptions<K extends keyof ArgType> extends ArgumentOptions {
@@ -1708,14 +1765,14 @@ interface ExtendedArgumentOptions<K extends keyof ArgType> extends ArgumentOptio
 }
 interface ExtendedArgumentContext extends ArgumentContext {
     /**
-     * The canonical argument specified by the user in the command, as
+     * The canonical parameter specified by the user in the command, as
      * a string, equivalent to the first parameter of [[Argument#run]].
      * This allows [[ExtendedArgument#handle]] to access the original
      * argument, which is useful for returning [[Argument#error]] so
      * that you don't have to convert the parsed argument back into a
      * string.
      */
-    argument: string;
+    parameter: string;
 }
 
 declare enum Events {
@@ -1891,4 +1948,4 @@ declare class PermissionsPrecondition implements PreconditionSingleResolvableDet
     constructor(permissions: PermissionResolvable);
 }
 
-export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionErrorExtras, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };
+export { ArgOptions, ArgType, Args, ArgsNextCallback, Argument, ArgumentContext, ArgumentError, ArgumentOptions, ArgumentResult, ArgumentStore, AsyncArgumentResult, AsyncPluginHooks, AsyncPreconditionContainerReturn, AsyncPreconditionResult, BucketType, ClientLoggerOptions, Command, CommandAcceptedPayload, CommandContext, CommandDeniedPayload, CommandErrorPayload, CommandOptions, CommandStore, CommandSuccessPayload, CooldownLevel, Err, Event, EventErrorPayload, EventOptions, EventStore, Events, ExtendedArgument, ExtendedArgumentContext, ExtendedArgumentOptions, IArgument, ICommandPayload, ILogger, IPieceError, IPreconditionCondition, IPreconditionContainer, LogLevel, LogMethods, Logger, Maybe, None, Ok, PermissionsPrecondition, Plugin, PluginHook, PluginManager, PreCommandRunPayload, Precondition, PreconditionArrayResolvable, PreconditionArrayResolvableDetails, PreconditionConditionAnd, PreconditionConditionOr, PreconditionContainerArray, PreconditionContainerResult, PreconditionContainerReturn, PreconditionContainerSingle, PreconditionContext, PreconditionEntryResolvable, PreconditionError, PreconditionResult, PreconditionRunCondition, PreconditionRunMode, PreconditionSingleResolvable, PreconditionSingleResolvableDetails, PreconditionStore, RepeatArgOptions, Result, SapphireClient, SapphireClientOptions, SapphirePluginAsyncHook, SapphirePluginHook, SapphirePluginHookEntry, SapphirePrefix, SapphirePrefixHook, Some, SyncPluginHooks, UserError, err, isErr, isMaybe, isNone, isOk, isSome, maybe, none, ok, postInitialization, postLogin, preGenericsInitialization, preInitialization, preLogin, some };

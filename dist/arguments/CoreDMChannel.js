@@ -2,19 +2,20 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreArgument = void 0;
 const discord_js_utilities_1 = require("@sapphire/discord.js-utilities");
-const Argument_1 = require("../lib/structures/Argument");
-class CoreArgument extends Argument_1.Argument {
+const ExtendedArgument_1 = require("../lib/structures/ExtendedArgument");
+class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
     constructor(context) {
-        super(context, { name: 'dmChannel' });
+        super(context, { baseArgument: 'channel', name: 'dmChannel' });
     }
-    run(argument) {
-        const channel = this.context.client.channels.cache.get(argument);
-        if (!channel) {
-            return this.error(argument, 'ArgumentChannelMissingChannel', 'The argument did not resolve to a channel.');
-        }
+    handle(channel, context) {
         return discord_js_utilities_1.isDMChannel(channel)
             ? this.ok(channel)
-            : this.error(argument, 'ArgumentDMChannelInvalidChannel', 'The argument did not resolve to a DM channel.');
+            : this.error({
+                parameter: context.parameter,
+                identifier: 'ArgumentDMChannelInvalidChannel',
+                message: 'The argument did not resolve to a DM channel.',
+                context
+            });
     }
 }
 exports.CoreArgument = CoreArgument;

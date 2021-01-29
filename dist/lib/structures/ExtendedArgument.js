@@ -61,12 +61,12 @@ class ExtendedArgument extends Argument_1.Argument {
     get base() {
         return this.context.client.arguments.get(this.baseArgument);
     }
-    async run(argument, context) {
-        const result = await this.base.run(argument, context);
+    async run(parameter, context) {
+        const result = await this.base.run(parameter, context);
         // If the result was successful (i.e. is of type `Ok<ArgType[K]>`), pass its
         // value to [[ExtendedArgument#handle]] for further parsing. Otherwise, return
         // the error as is; it'll provide contextual information from the base argument.
-        return Result_1.isOk(result) ? this.handle(result.value, { ...context, argument }) : result;
+        return Result_1.isOk(result) ? this.handle(result.value, { ...context, parameter }) : result;
     }
 }
 exports.ExtendedArgument = ExtendedArgument;

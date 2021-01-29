@@ -11,10 +11,15 @@ class UserError extends Error {
      * @param type The identifier, useful to localize emitted errors.
      * @param message The error message.
      */
-    constructor(type, message) {
-        super(message);
-        this.name = 'UserError';
-        this.identifier = type;
+    constructor(options) {
+        var _a;
+        super(options.message);
+        this.identifier = options.identifier;
+        this.context = (_a = options.context) !== null && _a !== void 0 ? _a : null;
+    }
+    // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+    get name() {
+        return 'UserError';
     }
 }
 exports.UserError = UserError;

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CorePrecondition = void 0;
+const ratelimits_1 = require("@sapphire/ratelimits");
 const Precondition_1 = require("../lib/structures/Precondition");
 require("../lib/types/Enums");
-const ratelimits_1 = require("@sapphire/ratelimits");
 class CorePrecondition extends Precondition_1.Precondition {
     constructor() {
         super(...arguments);
@@ -16,7 +16,10 @@ class CorePrecondition extends Precondition_1.Precondition {
         const remaining = bucket.take(this.getID(message, context));
         return remaining === 0
             ? this.ok()
-            : this.error(this.name, `You have just used this command. Try again in ${Math.ceil(remaining / 1000)} second${remaining > 1000 ? 's' : ''}.`, { remaining });
+            : this.error({
+                message: `You have just used this command. Try again in ${Math.ceil(remaining / 1000)} second${remaining > 1000 ? 's' : ''}.`,
+                context: { remaining }
+            });
     }
     getID(message, context) {
         switch (context.bucketType) {

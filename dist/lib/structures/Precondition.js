@@ -8,9 +8,12 @@ class Precondition extends pieces_1.Piece {
     ok() {
         return Result_1.ok();
     }
-    error(typeOrMessage, rawMessage, rawExtras) {
-        const [type, message, extras] = typeof rawMessage === 'string' ? [typeOrMessage, rawMessage, rawExtras] : [this.name, typeOrMessage, rawMessage];
-        return Result_1.err(new PreconditionError_1.PreconditionError(this, type, message, extras));
+    /**
+     * Constructs a [[PreconditionError]] with the precondition parameter set to `this`.
+     * @param options The information.
+     */
+    error(options) {
+        return Result_1.err(new PreconditionError_1.PreconditionError({ precondition: this, ...options }));
     }
 }
 exports.Precondition = Precondition;

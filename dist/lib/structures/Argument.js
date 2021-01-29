@@ -68,8 +68,14 @@ class Argument extends pieces_1.AliasPiece {
     ok(value) {
         return Result_1.ok(value);
     }
-    error(parameter, typeOrMessage, rawMessage) {
-        return Result_1.err(Args_1.Args.error(this, parameter, typeOrMessage, rawMessage));
+    /**
+     * Constructs an [[ArgumentError]] with a custom type.
+     * @param parameter The parameter that triggered the argument.
+     * @param type The identifier for the error.
+     * @param message The description message for the rejection.
+     */
+    error(options) {
+        return Result_1.err(Args_1.Args.error({ argument: this, ...options }));
     }
 }
 exports.Argument = Argument;

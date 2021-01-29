@@ -10,10 +10,15 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
             baseArgument: 'guildChannel'
         });
     }
-    handle(channel, { argument }) {
+    handle(channel, context) {
         return discord_js_utilities_1.isTextChannel(channel)
             ? this.ok(channel)
-            : this.error(argument, 'ArgumentTextChannelInvalidChannel', 'The argument did not resolve to a text channel.');
+            : this.error({
+                parameter: context.parameter,
+                identifier: 'ArgumentTextChannelInvalidChannel',
+                message: 'The argument did not resolve to a text channel.',
+                context
+            });
     }
 }
 exports.CoreArgument = CoreArgument;

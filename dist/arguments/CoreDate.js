@@ -6,17 +6,22 @@ class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'date' });
     }
-    run(argument, context) {
-        const parsed = new Date(argument);
+    run(parameter, context) {
+        const parsed = new Date(parameter);
         const time = parsed.getTime();
         if (Number.isNaN(time)) {
-            return this.error(argument, 'ArgumentDateInvalidNumber', 'The argument did not resolve to a valid date.');
+            return this.error({
+                parameter,
+                identifier: 'ArgumentDateInvalidNumber',
+                message: 'The argument did not resolve to a valid date.',
+                context
+            });
         }
         if (typeof context.minimum === 'number' && time < context.minimum) {
-            return this.error(argument, 'ArgumentDateTooSmall', 'The argument is too small.');
+            return this.error({ parameter, identifier: 'ArgumentDateTooSmall', message: 'The argument is too small.', context });
         }
         if (typeof context.maximum === 'number' && time > context.maximum) {
-            return this.error(argument, 'ArgumentDateTooBig', 'The argument is too big.');
+            return this.error({ parameter, identifier: 'ArgumentDateTooBig', message: 'The argument is too big.', context });
         }
         return this.ok(parsed);
     }

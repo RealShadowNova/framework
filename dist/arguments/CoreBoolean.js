@@ -8,13 +8,13 @@ class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'boolean' });
     }
-    run(argument) {
-        const boolean = argument.toLowerCase();
+    run(parameter, context) {
+        const boolean = parameter.toLowerCase();
         if (truths.includes(boolean))
             return this.ok(true);
         if (falses.includes(boolean))
             return this.ok(false);
-        return this.error(argument, 'ArgumentBooleanInvalidBoolean', 'The argument did not resolve to a boolean.');
+        return this.error({ parameter, identifier: 'ArgumentBooleanInvalidBoolean', message: 'The argument did not resolve to a boolean.', context });
     }
 }
 exports.CoreArgument = CoreArgument;

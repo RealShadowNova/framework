@@ -8,10 +8,12 @@ class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'message' });
     }
-    async run(argument, context) {
+    async run(parameter, context) {
         var _a;
-        const message = (_a = (await this.resolveByID(argument, context))) !== null && _a !== void 0 ? _a : (await this.resolveByLink(argument, context));
-        return message ? this.ok(message) : this.error(argument, 'ArgumentMessageUnknownMessage', 'The argument did not resolve to a message.');
+        const message = (_a = (await this.resolveByID(parameter, context))) !== null && _a !== void 0 ? _a : (await this.resolveByLink(parameter, context));
+        return message
+            ? this.ok(message)
+            : this.error({ parameter, identifier: 'ArgumentMessageUnknownMessage', message: 'The argument did not resolve to a message.', context });
     }
     async resolveByID(argument, context) {
         var _a;

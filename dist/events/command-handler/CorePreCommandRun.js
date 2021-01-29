@@ -2,16 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CoreEvent = void 0;
 const UserError_1 = require("../../lib/errors/UserError");
+const Result_1 = require("../../lib/parsers/Result");
 const Event_1 = require("../../lib/structures/Event");
 const Events_1 = require("../../lib/types/Events");
-const Result_1 = require("../../lib/parsers/Result");
 class CoreEvent extends Event_1.Event {
     constructor(context) {
         super(context, { event: Events_1.Events.PreCommandRun });
     }
-    async run({ message, command, parameters, context }) {
+    async run(payload) {
+        const { message, command, parameters, context } = payload;
         if (!command.enabled) {
-            message.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError('CommandDisabled', 'This command is disabled.'), {
+            message.client.emit(Events_1.Events.CommandDenied, new UserError_1.UserError({ identifier: 'CommandDisabled', message: 'This command is disabled.', context: payload }), {
                 message,
                 command,
                 parameters,
@@ -21,10 +22,10 @@ class CoreEvent extends Event_1.Event {
         }
         const result = await command.preconditions.run(message, command);
         if (Result_1.isErr(result)) {
-            message.client.emit(Events_1.Events.CommandDenied, result.error, { message, command, parameters, context });
+            message.client.emit(Events_1.Events.CommandDenied, result.error, payload);
         }
         else {
-            message.client.emit(Events_1.Events.CommandAccepted, { message, command, parameters, context });
+            message.client.emit(Events_1.Events.CommandAccepted, payload);
         }
     }
 }

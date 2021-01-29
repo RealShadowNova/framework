@@ -29,15 +29,16 @@ class Args {
     async pickResult(type, options = {}) {
         const argument = this.resolveArgument(type);
         if (!argument)
-            return Result_1.err(new UserError_1.UserError('UnavailableArgument', `The argument "${type}" was not found.`));
+            return this.unavailableArgument(type);
         const result = await this.parser.singleParseAsync(async (arg) => argument.run(arg, {
             args: this,
+            argument,
             message: this.message,
             command: this.command,
             ...options
         }));
         if (result === null)
-            return Result_1.err(new UserError_1.UserError('MissingArguments', 'There are no more arguments.'));
+            return this.missingArguments();
         if (Result_1.isOk(result))
             return result;
         return result;
@@ -51,13 +52,14 @@ class Args {
     async restResult(type, options = {}) {
         const argument = this.resolveArgument(type);
         if (!argument)
-            return Result_1.err(new UserError_1.UserError('UnavailableArgument', `The argument "${type}" was not found.`));
+            return this.unavailableArgument(type);
         if (this.parser.finished)
-            return Result_1.err(new UserError_1.UserError('MissingArguments', 'There are no more arguments.'));
+            return this.missingArguments();
         const state = this.parser.save();
         const data = this.parser.many().reduce((acc, token) => `${acc}${token.value}${token.trailing}`, '');
         const result = await argument.run(data, {
             args: this,
+            argument,
             message: this.message,
             command: this.command,
             ...options
@@ -77,13 +79,14 @@ class Args {
         var _a;
         const argument = this.resolveArgument(type);
         if (!argument)
-            return Result_1.err(new UserError_1.UserError('UnavailableArgument', `The argument "${type}" was not found.`));
+            return this.unavailableArgument(type);
         if (this.parser.finished)
-            return Result_1.err(new UserError_1.UserError('MissingArguments', 'There are no more arguments.'));
+            return this.missingArguments();
         const output = [];
         for (let i = 0, times = (_a = options.times) !== null && _a !== void 0 ? _a : Infinity; i < times; i++) {
             const result = await this.parser.singleParseAsync(async (arg) => argument.run(arg, {
                 args: this,
+                argument,
                 message: this.message,
                 command: this.command,
                 ...options
@@ -202,6 +205,15 @@ class Args {
     get finished() {
         return this.parser.finished;
     }
+    unavailableArgument(type) {
+        return Result_1.err(new UserError_1.UserError({
+            identifier: 'UnavailableArgument',
+            message: `The argument "${typeof type === 'string' ? type : type.name}" was not found.`
+        }));
+    }
+    missingArguments() {
+        return Result_1.err(new UserError_1.UserError({ identifier: 'MissingArguments', message: 'There are no more arguments.' }));
+    }
     /**
      * Resolves an argument.
      * @param arg The argument name or [[IArgument]] instance.
@@ -218,9 +230,15 @@ class Args {
     static make(cb, name = '') {
         return { run: cb, name };
     }
-    static error(argument, parameter, typeOrMessage, rawMessage) {
-        const [type, message] = typeof rawMessage === 'undefined' ? [argument.name, typeOrMessage] : [typeOrMessage, rawMessage];
-        return new ArgumentError_1.ArgumentError(argument, parameter, type, message);
+    /**
+     * Constructs an [[ArgumentError]] with a custom type.
+     * @param argument The argument that caused the rejection.
+     * @param parameter The parameter that triggered the argument.
+     * @param type The identifier for the error.
+     * @param message The description message for the rejection.
+     */
+    static error(options) {
+        return new ArgumentError_1.ArgumentError(options);
     }
 }
 exports.Args = Args;

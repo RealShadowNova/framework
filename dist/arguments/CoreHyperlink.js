@@ -7,12 +7,17 @@ class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'hyperlink', aliases: ['url'] });
     }
-    run(argument) {
+    run(parameter, context) {
         try {
-            return this.ok(new url_1.URL(argument));
+            return this.ok(new url_1.URL(parameter));
         }
         catch {
-            return this.error(argument, 'ArgumentHyperlinkInvalidURL', 'The argument did not resolve to a valid URL.');
+            return this.error({
+                parameter,
+                identifier: 'ArgumentHyperlinkInvalidURL',
+                message: 'The argument did not resolve to a valid URL.',
+                context
+            });
         }
     }
 }

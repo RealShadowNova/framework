@@ -10,10 +10,15 @@ class CoreArgument extends ExtendedArgument_1.ExtendedArgument {
             baseArgument: 'guildChannel'
         });
     }
-    handle(channel, { argument }) {
+    handle(channel, context) {
         return discord_js_utilities_1.isVoiceChannel(channel)
             ? this.ok(channel)
-            : this.error(argument, 'ArgumentVoiceChannelInvalidChannel', 'The argument did not resolve to a voice channel.');
+            : this.error({
+                parameter: context.parameter,
+                identifier: 'ArgumentVoiceChannelInvalidChannel',
+                message: 'The argument did not resolve to a voice channel.',
+                context
+            });
     }
 }
 exports.CoreArgument = CoreArgument;

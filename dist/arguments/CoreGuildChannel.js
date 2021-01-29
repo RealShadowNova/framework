@@ -7,16 +7,26 @@ class CoreArgument extends Argument_1.Argument {
     constructor(context) {
         super(context, { name: 'guildChannel' });
     }
-    run(argument, context) {
+    run(parameter, context) {
         var _a;
         const { guild } = context.message;
         if (!guild) {
-            return this.error(argument, 'ArgumentGuildChannelMissingGuild', 'The argument must be run in a guild.');
+            return this.error({
+                parameter,
+                identifier: 'ArgumentGuildChannelMissingGuild',
+                message: 'The argument must be run in a guild.',
+                context
+            });
         }
-        const channel = (_a = this.resolveByID(argument, guild)) !== null && _a !== void 0 ? _a : this.resolveByQuery(argument, guild);
+        const channel = (_a = this.resolveByID(parameter, guild)) !== null && _a !== void 0 ? _a : this.resolveByQuery(parameter, guild);
         return channel
             ? this.ok(channel)
-            : this.error(argument, 'ArgumentGuildChannelUnknownChannel', 'The argument did not resolve to a guild channel.');
+            : this.error({
+                parameter,
+                identifier: 'ArgumentGuildChannelUnknownChannel',
+                message: 'The argument did not resolve to a guild channel.',
+                context
+            });
     }
     resolveByID(argument, guild) {
         var _a, _b;
