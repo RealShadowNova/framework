@@ -523,9 +523,11 @@ interface CommandOptions extends AliasPieceOptions {
 }
 interface CommandContext extends Record<PropertyKey, unknown> {
     /**
-     * The prefix used to run this command
+     * The prefix used to run this command.
+     *
+     * This is a string for the mention and default prefix, and a RegExp for the `regexPrefix`.
      */
-    prefix: string;
+    prefix: string | RegExp;
     /**
      * The alias used to run this command
      */
@@ -1487,6 +1489,23 @@ interface SapphireClientOptions {
      */
     defaultPrefix?: SapphirePrefix;
     /**
+     * The regex prefix, an alternative to a mention or regular prefix to allow creating natural language command messages
+     * @since 1.0.0
+     * @example
+     * ```ts
+     * /^(hey +)?bot[,! ]/i
+     *
+     * // Matches:
+     * // - hey bot,
+     * // - hey bot!
+     * // - hey bot
+     * // - bot,
+     * // - bot!
+     * // - bot
+     * ```
+     */
+    regexPrefix?: RegExp;
+    /**
      * The prefix hook, by default it is a callback function that returns [[SapphireClientOptions.defaultPrefix]].
      * @since 1.0.0
      * @default () => client.options.defaultPrefix
@@ -1882,9 +1901,9 @@ declare module 'discord.js' {
         [Events.PiecePostLoad]: [Store<Piece>, Piece];
         [Events.MentionPrefixOnly]: [Message];
         [Events.EventError]: [Error, EventErrorPayload];
-        [Events.PrefixedMessage]: [Message, string];
-        [Events.UnknownCommandName]: [Message, string];
-        [Events.UnknownCommand]: [Message, string, string];
+        [Events.PrefixedMessage]: [Message, string | RegExp];
+        [Events.UnknownCommandName]: [Message, string | RegExp];
+        [Events.UnknownCommand]: [Message, string, string | RegExp];
         [Events.PreCommandRun]: [PreCommandRunPayload];
         [Events.CommandDenied]: [UserError, CommandDeniedPayload];
         [Events.CommandAccepted]: [CommandAcceptedPayload];
