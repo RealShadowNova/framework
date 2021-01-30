@@ -49,6 +49,15 @@ class Command extends pieces_1.AliasPiece {
             ['“', '”'],
             ['「', '」'] // Corner brackets (CJK)
         ]);
+        if (options.generateDashLessAliases) {
+            const dashLessAliases = [];
+            if (this.name.includes('-'))
+                dashLessAliases.push(this.name.replace(/-/g, ''));
+            for (const alias of this.aliases)
+                if (alias.includes('-'))
+                    dashLessAliases.push(alias.replace(/-/g, ''));
+            this.aliases = [...this.aliases, ...dashLessAliases];
+        }
     }
     /**
      * The pre-parse method. This method can be overriden by plugins to define their own argument parser.

@@ -479,6 +479,12 @@ declare abstract class Command<T = Args> extends AliasPiece {
  */
 interface CommandOptions extends AliasPieceOptions {
     /**
+     * Whether to add aliases for commands with dashes in them
+     * @since 1.0.0
+     * @default false
+     */
+    generateDashLessAliases?: boolean;
+    /**
      * The description for the command.
      * @since 1.0.0
      * @default ''
